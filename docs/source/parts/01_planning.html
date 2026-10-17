@@ -1,0 +1,246 @@
+<!-- ============================ PART 1 ============================ -->
+<section class="part-start">
+<div class="part-kicker">Part 1</div>
+<h1 id="part1">1. Project Planning &amp; Management</h1>
+<p class="part-intro">What SentiLingo is, what it will deliver and when, how the team works, which risks matter most and how success is measured.</p>
+</section>
+
+<h2 id="s1-1">1.1 Project Overview</h2>
+<p>Companies receive customer feedback through app and e-commerce reviews, social media, surveys and support tickets. In Egypt this feedback is written in Modern Standard Arabic (MSA), Egyptian Arabic, English and Franco-Arabic (Arabic in Latin letters, e.g. <span class="mono">el delivery kan 3ady</span>), often mixed in one message. Tagging it by hand is slow and inconsistent, and many ready-made tools are tuned for English or MSA (see Part 2).</p>
+
+<div class="note">
+<p><strong>Problem statement (from the project brief).</strong> A company receives customer feedback in natural-language text and needs to automatically identify whether feedback expresses positive, negative, or other predefined sentiment categories.</p>
+</div>
+
+<p><strong>SentiLingo</strong> labels each piece of feedback <strong>Negative</strong>, <strong>Neutral</strong> or <strong>Positive</strong> with a confidence score. It compares three model families on the same data splits: a classical baseline (TF-IDF with word and character n-grams, Naive Bayes and Logistic Regression), a BiLSTM, and a fine-tuned pretrained Transformer. All experiments are tracked in MLflow. The best model is chosen by macro-F1 on a frozen test set, its errors are analysed, and it can optionally be served from Azure Machine Learning.</p>
+
+<div class="fig">
+<svg viewBox="0 0 1000 330" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#12707a"/>
+    </marker>
+  </defs>
+
+  <!-- Column 1: feedback -->
+  <rect x="0.5" y="0.5" width="180" height="262" rx="7" fill="#fff" stroke="#d5dbe3"/>
+  <path d="M0.5,34 V7.5 a7,7 0 0 1 7,-7 H173.5 a7,7 0 0 1 7,7 V34 z" fill="#17324d"/>
+  <text x="90.5" y="23" text-anchor="middle" fill="#fff" font-size="14.5" font-weight="600">1 · Customer feedback</text>
+  <text x="12" y="58" font-size="13" fill="#1f2933">Product &amp; app reviews</text>
+  <text x="12" y="79" font-size="13" fill="#1f2933">Social-media posts</text>
+  <text x="12" y="100" font-size="13" fill="#1f2933">Surveys &amp; tickets</text>
+  <rect x="12" y="116" width="44" height="19" rx="9.5" fill="#e3f1f2"/><text x="34" y="129.5" text-anchor="middle" font-size="11" fill="#12707a" font-weight="600">MSA</text>
+  <rect x="60" y="116" width="54" height="19" rx="9.5" fill="#e3f1f2"/><text x="87" y="129.5" text-anchor="middle" font-size="11" fill="#12707a" font-weight="600">Egyptian</text>
+  <rect x="118" y="116" width="50" height="19" rx="9.5" fill="#e3f1f2"/><text x="143" y="129.5" text-anchor="middle" font-size="11" fill="#12707a" font-weight="600">English</text>
+  <rect x="12" y="139" width="54" height="19" rx="9.5" fill="#e3f1f2"/><text x="39" y="152.5" text-anchor="middle" font-size="11" fill="#12707a" font-weight="600">Franco</text>
+  <rect x="70" y="139" width="98" height="19" rx="9.5" fill="#e3f1f2"/><text x="119" y="152.5" text-anchor="middle" font-size="11" fill="#12707a" font-weight="600">Code-switched</text>
+  <rect x="12" y="170" width="156" height="25" rx="5" fill="#fff" stroke="#d5dbe3"/><rect x="12" y="170" width="5" height="25" fill="#c8453b"/>
+  <text x="162" y="187.5" text-anchor="end" font-size="13" fill="#1f2933">التوصيل اتأخر جدًا</text>
+  <rect x="12" y="201" width="156" height="25" rx="5" fill="#fff" stroke="#d5dbe3"/><rect x="12" y="201" width="5" height="25" fill="#2e8b57"/>
+  <text x="24" y="218" font-size="12" fill="#1f2933">Great support team!</text>
+  <rect x="12" y="232" width="156" height="25" rx="5" fill="#fff" stroke="#d5dbe3"/><rect x="12" y="232" width="5" height="25" fill="#7b8794"/>
+  <text x="24" y="249" font-size="12" fill="#1f2933">el delivery kan 3ady</text>
+
+  <!-- Column 2: data & preprocessing -->
+  <rect x="205.5" y="0.5" width="180" height="262" rx="7" fill="#fff" stroke="#d5dbe3"/>
+  <path d="M205.5,34 V7.5 a7,7 0 0 1 7,-7 H378.5 a7,7 0 0 1 7,7 V34 z" fill="#12707a"/>
+  <text x="295.5" y="23" text-anchor="middle" fill="#fff" font-size="14.5" font-weight="600">2 · Data &amp; preprocessing</text>
+  <g font-size="13" fill="#1f2933">
+    <text x="217" y="60">Ingestion &amp; unified schema</text>
+    <text x="217" y="86">3-class label mapping</text>
+    <text x="217" y="112">De-duplication</text>
+    <text x="217" y="138">Stratified splits</text>
+    <text x="217" y="164">Language identification</text>
+    <text x="217" y="190">Text cleaning</text>
+    <text x="217" y="216">Arabic normalisation</text>
+    <text x="217" y="242">Tokenisation</text>
+  </g>
+  <g fill="#12707a"><circle cx="210.5" cy="56" r="0"/></g>
+
+  <!-- Column 3: representation & models -->
+  <rect x="410.5" y="0.5" width="180" height="262" rx="7" fill="#fff" stroke="#d5dbe3"/>
+  <path d="M410.5,34 V7.5 a7,7 0 0 1 7,-7 H583.5 a7,7 0 0 1 7,7 V34 z" fill="#1f5f8b"/>
+  <text x="500.5" y="23" text-anchor="middle" fill="#fff" font-size="14.5" font-weight="600">3 · Features &amp; models</text>
+  <rect x="420" y="44" width="161" height="64" rx="5" fill="#f4f6f9" stroke="#d5dbe3"/>
+  <text x="430" y="63" font-size="12.5" font-weight="600" fill="#17324d">Classical baseline</text>
+  <text x="430" y="81" font-size="12" fill="#1f2933">TF-IDF · word/char n-grams</text>
+  <text x="430" y="98" font-size="12" fill="#1f2933">Naive Bayes · Log. Regression</text>
+  <rect x="420" y="116" width="161" height="64" rx="5" fill="#f4f6f9" stroke="#d5dbe3"/>
+  <text x="430" y="135" font-size="12.5" font-weight="600" fill="#17324d">Deep learning</text>
+  <text x="430" y="153" font-size="12" fill="#1f2933">Embeddings → BiLSTM</text>
+  <text x="430" y="170" font-size="12" fill="#1f2933">TensorFlow / Keras</text>
+  <rect x="420" y="188" width="161" height="64" rx="5" fill="#f4f6f9" stroke="#d5dbe3"/>
+  <text x="430" y="207" font-size="12.5" font-weight="600" fill="#17324d">Pretrained Transformer</text>
+  <text x="430" y="225" font-size="12" fill="#1f2933">Multilingual / Arabic BERT</text>
+  <text x="430" y="242" font-size="12" fill="#1f2933">fine-tuned (Hugging Face)</text>
+
+  <!-- Column 4: evaluation -->
+  <rect x="615.5" y="0.5" width="180" height="262" rx="7" fill="#fff" stroke="#d5dbe3"/>
+  <path d="M615.5,34 V7.5 a7,7 0 0 1 7,-7 H788.5 a7,7 0 0 1 7,7 V34 z" fill="#b7791f"/>
+  <text x="705.5" y="23" text-anchor="middle" fill="#fff" font-size="14.5" font-weight="600">4 · Evaluation &amp; selection</text>
+  <g font-size="13" fill="#1f2933">
+    <text x="627" y="60">Accuracy</text>
+    <text x="627" y="86">Precision · Recall</text>
+    <text x="627" y="112">F1 (macro &amp; per class)</text>
+    <text x="627" y="138">Confusion matrix</text>
+    <text x="627" y="164">Per-language slices</text>
+    <text x="627" y="190">Error analysis</text>
+    <text x="627" y="216">Model comparison</text>
+    <text x="627" y="242" font-weight="600" fill="#17324d">Best model → registry</text>
+  </g>
+
+  <!-- Column 5: serving -->
+  <rect x="820.5" y="0.5" width="179" height="262" rx="7" fill="#fff" stroke="#d5dbe3" stroke-dasharray="5 3"/>
+  <path d="M820.5,34 V7.5 a7,7 0 0 1 7,-7 H992.5 a7,7 0 0 1 7,7 V34 z" fill="#5b6675"/>
+  <text x="910" y="23" text-anchor="middle" fill="#fff" font-size="14.5" font-weight="600">5 · Serving (extension)</text>
+  <g font-size="13" fill="#1f2933">
+    <text x="832" y="60">MLflow Model Registry</text>
+    <text x="832" y="86">Azure ML online endpoint</text>
+    <text x="832" y="112">REST API (key auth)</text>
+    <text x="832" y="138">Streamlit demo</text>
+    <text x="832" y="164">Batch CSV scoring</text>
+  </g>
+  <text x="832" y="196" font-size="11.5" fill="#5b6675">Output per text:</text>
+  <rect x="832" y="205" width="155" height="22" rx="11" fill="#fde2df"/>
+  <text x="909.5" y="220.5" text-anchor="middle" font-size="11.5" font-weight="700" fill="#9b2c22">label + confidence</text>
+  <text x="909.5" y="247" text-anchor="middle" font-size="11" fill="#5b6675">(+ detected language)</text>
+
+  <!-- Arrows -->
+  <g stroke="#12707a" stroke-width="2.2" fill="none" marker-end="url(#arrow)">
+    <line x1="182" y1="131" x2="203" y2="131"/>
+    <line x1="387" y1="131" x2="408" y2="131"/>
+    <line x1="592" y1="131" x2="613" y2="131"/>
+    <line x1="797" y1="131" x2="818" y2="131"/>
+  </g>
+
+  <!-- MLflow tracking bar -->
+  <g stroke="#12707a" stroke-width="1.4" stroke-dasharray="3 3">
+    <line x1="295.5" y1="263" x2="295.5" y2="284"/>
+    <line x1="500.5" y1="263" x2="500.5" y2="284"/>
+    <line x1="705.5" y1="263" x2="705.5" y2="284"/>
+    <line x1="910" y1="263" x2="910" y2="284"/>
+  </g>
+  <rect x="205.5" y="284.5" width="794" height="40" rx="6" fill="#e3f1f2" stroke="#12707a"/>
+  <text x="602" y="309.5" text-anchor="middle" font-size="13.5" fill="#12707a"><tspan font-weight="700">MLflow experiment tracking</tspan> — parameters · metrics · confusion matrices · models · run lineage</text>
+</svg>
+</div>
+<div class="caption">Figure 1 — SentiLingo solution overview.</div>
+
+<h2 id="s1-2">1.2 Objectives</h2>
+<table>
+  <thead><tr><th style="width:7%">ID</th><th style="width:78%">Objective</th><th style="width:15%">Due (2026)</th></tr></thead>
+  <tbody>
+    <tr><td class="id">O1</td><td>Build a unified Arabic (MSA and Egyptian) and English dataset with three sentiment classes, frozen splits and a data card.</td><td class="nowrap">25 Oct</td></tr>
+    <tr><td class="id">O2</td><td>Build a configurable preprocessing pipeline: cleaning, Arabic normalisation, tokenisation.</td><td class="nowrap">1 Nov</td></tr>
+    <tr><td class="id">O3</td><td>Train classical baselines: TF-IDF with n-grams, plus Naive Bayes and Logistic Regression.</td><td class="nowrap">1 Nov</td></tr>
+    <tr><td class="id">O4</td><td>Train a BiLSTM and fine-tune at least one pretrained Transformer.</td><td class="nowrap">15 Nov</td></tr>
+    <tr><td class="id">O5</td><td>Compare all models, analyse errors and register the best model in MLflow.</td><td class="nowrap">22 Nov</td></tr>
+    <tr><td class="id">O6</td><td><em>(Optional)</em> Deploy the best model to an Azure ML endpoint with a small demo app.</td><td class="nowrap">29 Nov</td></tr>
+    <tr><td class="id">O7</td><td>Deliver the final documentation, README and presentation.</td><td class="nowrap">4 Dec</td></tr>
+  </tbody>
+</table>
+
+<h2 id="s1-3">1.3 Scope</h2>
+<div class="grid-2">
+  <div class="card">
+    <h4>In scope</h4>
+    <ul>
+      <li>Arabic (MSA, Egyptian) and English; Franco-Arabic evaluated where data allows</li>
+      <li>Three classes: Negative, Neutral, Positive</li>
+      <li>Public, labelled review and tweet data</li>
+      <li>Preprocessing, TF-IDF and n-grams, NB, LR, BiLSTM, Transformer</li>
+      <li>Evaluation, MLflow tracking, error analysis, sample predictions</li>
+      <li>Optional: Azure ML endpoint and Streamlit demo</li>
+    </ul>
+  </div>
+  <div class="card" style="border-top-color: var(--neg);">
+    <h4>Out of scope</h4>
+    <ul>
+      <li>Aspect-based sentiment and emotion detection</li>
+      <li>Speech, image or video feedback</li>
+      <li>Live social-media crawling and CRM integration</li>
+      <li>Collecting private customer data</li>
+      <li>Production SLAs and automated retraining</li>
+    </ul>
+  </div>
+</div>
+<h4>Assumptions and constraints</h4>
+<ul>
+  <li>Zero budget: free Colab and Kaggle GPUs, open-source tools, and student or DEPI Azure credit for the optional deployment.</li>
+  <li>Only public data is used, and no personal data is committed to the repository.</li>
+  <li>Base-size Transformers with inputs of up to 128 tokens fit the free GPUs.</li>
+  <li>The dates are fixed: kick-off on 19 October and final presentation on 4 December 2026.</li>
+</ul>
+
+<h2 id="s1-4">1.4 Deliverables</h2>
+<table class="compact">
+  <thead><tr><th style="width:6%">ID</th><th style="width:26%">Deliverable (from the brief)</th><th style="width:50%">Description</th><th style="width:18%">Milestone</th></tr></thead>
+  <tbody>
+    <tr><td class="id">D1</td><td>Dataset</td><td>Unified dataset, label mapping, frozen splits, data card</td><td>MS1 · 25 Oct</td></tr>
+    <tr><td class="id">D2</td><td>NLP preprocessing pipeline</td><td>Configurable module with unit tests</td><td>MS2 · 1 Nov</td></tr>
+    <tr><td class="id">D3</td><td>Classical baseline</td><td>TF-IDF with n-grams; Naive Bayes and Logistic Regression</td><td>MS2 · 1 Nov</td></tr>
+    <tr><td class="id">D4</td><td>Deep-learning / pretrained model</td><td>BiLSTM and a fine-tuned Transformer</td><td>MS3 · 15 Nov</td></tr>
+    <tr><td class="id">D5</td><td>Model comparison</td><td>Leaderboard with per-language and latency results</td><td>MS4 · 22 Nov</td></tr>
+    <tr><td class="id">D6</td><td>MLflow experiment tracking</td><td>Every run logged; best model registered</td><td>MS4 · 22 Nov</td></tr>
+    <tr><td class="id">D7</td><td>Error analysis</td><td>Misclassifications grouped by cause</td><td>MS4 · 22 Nov</td></tr>
+    <tr><td class="id">D8</td><td>Sample predictions</td><td>Correct and incorrect examples in each language</td><td>MS4 · 22 Nov</td></tr>
+    <tr><td class="id">D9</td><td>README</td><td>Set-up, reproduction steps, results, limitations</td><td>MS6 · 4 Dec</td></tr>
+    <tr><td class="id">D10</td><td>Endpoint and demo <em>(optional)</em></td><td>Azure ML endpoint and Streamlit app</td><td>MS5 · 29 Nov</td></tr>
+  </tbody>
+</table>
+
+<h2 id="s1-5">1.5 Methodology</h2>
+<p>The project follows CRISP-DM (Wirth &amp; Hipp, 2000): business understanding, data understanding, data preparation, modelling, evaluation and deployment. These phases run as seven one-week sprints. Each sprint starts with a planning meeting and ends with a short review. Tasks live on a GitHub Projects board, code is merged through reviewed pull requests, and every reported result links to its MLflow run.</p>
+
+<h2 id="s1-6">1.6 Timeline &amp; Milestones</h2>
+<p>The project runs from kick-off on <strong>19 October</strong> to the final presentation on <strong>4 December 2026</strong>, in seven one-week sprints (S1–S7). These two dates are fixed; the milestones in between are internal targets.</p>
+<div class="gantt-wrap">{{GANTT}}</div>
+<div class="caption">Figure 2 — Project schedule. Bars are coloured by phase; ◆ marks a milestone (red = fixed date).</div>
+{{MILESTONE_TABLE}}
+
+<h2 id="s1-7">1.7 Team &amp; Task Distribution</h2>
+<p>The team has five members:</p>
+<ol>{{TEAM_ITEMS}}</ol>
+<p>The work is split into five areas. An owner for each area will be agreed at the first sprint planning meeting and tracked on the GitHub Projects board. Every member takes part in at least one classical and one deep-learning experiment, and in the error analysis.</p>
+<table class="compact">
+  <thead><tr><th style="width:30%">Work area</th><th style="width:70%">Main tasks</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Data &amp; EDA</strong></td><td>Dataset sourcing, licence checks, label mapping, splits, data card</td></tr>
+    <tr><td><strong>Preprocessing &amp; classical models</strong></td><td>Cleaning, Arabic normalisation, tokenisation, TF-IDF, Naive Bayes, Logistic Regression</td></tr>
+    <tr><td><strong>Deep learning</strong></td><td>BiLSTM, Transformer fine-tuning, hyper-parameter tuning</td></tr>
+    <tr><td><strong>MLOps &amp; evaluation</strong></td><td>MLflow, evaluation scripts, error analysis, optional Azure deployment</td></tr>
+    <tr><td><strong>Documentation &amp; presentation</strong></td><td>README, reports, final slides</td></tr>
+  </tbody>
+</table>
+<p><strong>Communication:</strong> a weekly planning meeting and sprint review, a team chat for daily updates, and GitHub Issues and pull requests for tasks and code review.</p>
+
+<h2 id="s1-8">1.8 Risk Management</h2>
+<p>Risks are reviewed at every sprint review. The level combines likelihood and impact before mitigation.</p>
+<table class="compact">
+  <thead><tr><th style="width:5%">ID</th><th style="width:33%">Risk</th><th class="c" style="width:9%">Level</th><th style="width:53%">Mitigation</th></tr></thead>
+  <tbody>
+    <tr><td class="id">R1</td><td>Too little labelled Egyptian-dialect customer feedback</td><td class="c"><span class="pill lvl-h">High</span></td><td>Combine several public Arabic sources; label a small gold set by hand; report the dialect slice separately</td></tr>
+    <tr><td class="id">R2</td><td>A dataset is withdrawn or has a restrictive licence</td><td class="c"><span class="pill lvl-h">High</span></td><td>Check licences in week 1; keep backup sources; commit download scripts, not raw data</td></tr>
+    <tr><td class="id">R3</td><td>Limited free GPU time</td><td class="c"><span class="pill lvl-h">High</span></td><td>Base or distilled models, inputs of up to 128 tokens, mixed precision, saved checkpoints</td></tr>
+    <tr><td class="id">R4</td><td>Data leakage: duplicates across splits, or preprocessing fitted on all data</td><td class="c"><span class="pill lvl-h">High</span></td><td>De-duplicate before splitting; scikit-learn Pipelines fitted on training data only; frozen test set</td></tr>
+    <tr><td class="id">R5</td><td>Inconsistent labels across sources, and too few Neutral examples</td><td class="c"><span class="pill lvl-m">Medium</span></td><td>Written label-mapping policy; manual audit; stratified splits; class weights; macro-F1 as the main metric</td></tr>
+    <tr><td class="id">R6</td><td>Dialect, Franco-Arabic, sarcasm and negation cause errors</td><td class="c"><span class="pill lvl-m">Medium</span></td><td>Arabic normalisation, character n-grams, dialect-aware models, error-analysis categories</td></tr>
+    <tr><td class="id">R7</td><td>Uneven availability of team members</td><td class="c"><span class="pill lvl-m">Medium</span></td><td>Weekly planning, early warning of delays, shared tasks, buffer in the final week</td></tr>
+    <tr><td class="id">R8</td><td>Azure cost or quota problems for the optional deployment</td><td class="c"><span class="pill lvl-l">Low</span></td><td>Smallest suitable instance, deleted after the demo; local Streamlit demo as fallback</td></tr>
+  </tbody>
+</table>
+
+<h2 id="s1-9">1.9 Key Performance Indicators</h2>
+<table class="compact">
+  <thead><tr><th style="width:6%">ID</th><th style="width:54%">KPI (model metrics on the frozen test set)</th><th style="width:40%">Target</th></tr></thead>
+  <tbody>
+    <tr><td class="id">K1</td><td>Macro-F1 of the selected model (3 classes)</td><td><span class="kpi-target">≥ 0.75</span> (minimum 0.70)</td></tr>
+    <tr><td class="id">K2</td><td>Gain over the best classical baseline</td><td><span class="kpi-target">≥ +3 macro-F1 points</span></td></tr>
+    <tr><td class="id">K3</td><td>Macro-F1 for each language (Arabic, English)</td><td><span class="kpi-target">≥ 0.65 each</span></td></tr>
+    <tr><td class="id">K4</td><td>Latency for one text on CPU</td><td><span class="kpi-target">Baseline ≤ 20 ms; Transformer ≤ 300 ms</span></td></tr>
+    <tr><td class="id">K5</td><td>Results traceable to an MLflow run</td><td><span class="kpi-target">100%</span></td></tr>
+    <tr><td class="id">K6</td><td>Milestones delivered on time</td><td><span class="kpi-target">All fixed dates; ≥ 90% of internal ones</span></td></tr>
+    <tr><td class="id">K7</td><td>Brief deliverables in the repository</td><td><span class="kpi-target">9 / 9</span></td></tr>
+  </tbody>
+</table>
+<p>K1–K3 are provisional and will be reviewed after EDA (MS1). For comparison, a strong Twitter-adapted multilingual model reaches about 0.67 macro-F1 on Arabic and 0.71 on English three-class tweets (Barbieri et al., 2022). Review data is usually easier.</p>

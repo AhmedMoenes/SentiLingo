@@ -1,0 +1,67 @@
+{
+  "project_name": "SentiLingo",
+  "full_title": "Multilingual Customer Sentiment Analysis Platform",
+  "program": "Digital Egypt Pioneers Initiative (DEPI) — Round 5",
+  "track": "Microsoft Machine Learning",
+  "group_code": "To be added",
+  "instructor": "To be added",
+  "repo_url": "https://github.com/AhmedMoenes/SentiLingo",
+  "version": "1.0",
+  "date": "17 October 2026",
+  "submission_date": "19 October 2026",
+  "members": [
+    "احمد مؤنس احمد عبدالفتاح",
+    "نوران ناصر جلال سيد",
+    "محمد محمود محمد عبدلله عياد",
+    "احمد اشرف سامى فريد",
+    "رضوه أشرف جمعه مهدي"
+  ],
+  "schedule": {
+    "start": "2026-10-19",
+    "end": "2026-12-04",
+    "sprints": [
+      { "name": "S1", "start": "2026-10-19", "end": "2026-10-25" },
+      { "name": "S2", "start": "2026-10-26", "end": "2026-11-01" },
+      { "name": "S3", "start": "2026-11-02", "end": "2026-11-08" },
+      { "name": "S4", "start": "2026-11-09", "end": "2026-11-15" },
+      { "name": "S5", "start": "2026-11-16", "end": "2026-11-22" },
+      { "name": "S6", "start": "2026-11-23", "end": "2026-11-29" },
+      { "name": "S7", "start": "2026-11-30", "end": "2026-12-04" }
+    ],
+    "phases": [
+      { "name": "Data", "color": "#12707a" },
+      { "name": "Baseline", "color": "#1f5f8b" },
+      { "name": "Advanced models", "color": "#6b4fa0" },
+      { "name": "Evaluation", "color": "#b7791f" },
+      { "name": "Deployment (optional)", "color": "#7b8794" },
+      { "name": "Closure", "color": "#2e8b57" }
+    ],
+    "tasks": [
+      { "id": "T01", "phase": "Data", "name": "Dataset sourcing & licence review", "start": "2026-10-19", "end": "2026-10-21" },
+      { "id": "T02", "phase": "Data", "name": "Label mapping, de-duplication & splits", "start": "2026-10-20", "end": "2026-10-23" },
+      { "id": "T03", "phase": "Data", "name": "EDA & data card", "start": "2026-10-21", "end": "2026-10-25" },
+      { "id": "T04", "phase": "Baseline", "name": "Preprocessing pipeline", "start": "2026-10-26", "end": "2026-10-30" },
+      { "id": "T05", "phase": "Baseline", "name": "MLflow tracking setup", "start": "2026-10-26", "end": "2026-10-28" },
+      { "id": "T06", "phase": "Baseline", "name": "TF-IDF + n-gram baselines (NB, LR)", "start": "2026-10-28", "end": "2026-11-01" },
+      { "id": "T07", "phase": "Advanced models", "name": "Preprocessing & feature experiments", "start": "2026-11-02", "end": "2026-11-08" },
+      { "id": "T08", "phase": "Advanced models", "name": "BiLSTM model", "start": "2026-11-02", "end": "2026-11-09" },
+      { "id": "T09", "phase": "Advanced models", "name": "Transformer fine-tuning", "start": "2026-11-07", "end": "2026-11-15" },
+      { "id": "T10", "phase": "Advanced models", "name": "Hyper-parameter tuning", "start": "2026-11-11", "end": "2026-11-17" },
+      { "id": "T11", "phase": "Evaluation", "name": "Model comparison & selection", "start": "2026-11-16", "end": "2026-11-19" },
+      { "id": "T12", "phase": "Evaluation", "name": "Error analysis & sample predictions", "start": "2026-11-17", "end": "2026-11-22" },
+      { "id": "T13", "phase": "Deployment (optional)", "name": "Azure ML online endpoint", "start": "2026-11-23", "end": "2026-11-28" },
+      { "id": "T14", "phase": "Deployment (optional)", "name": "Demo app", "start": "2026-11-23", "end": "2026-11-29" },
+      { "id": "T15", "phase": "Closure", "name": "README, model card & final docs", "start": "2026-11-23", "end": "2026-12-02" },
+      { "id": "T16", "phase": "Closure", "name": "Presentation & rehearsal", "start": "2026-11-30", "end": "2026-12-04" }
+    ],
+    "milestones": [
+      { "id": "MS0", "name": "Kick-off: Docs Parts 1–3 + GitHub repo", "date": "2026-10-19", "criteria": "Documentation PDF in the repository; repository link registered; LMS assignment submitted", "official": true },
+      { "id": "MS1", "name": "Dataset v1 & EDA", "date": "2026-10-25", "criteria": "Unified dataset with frozen train / validation / test splits; data card and EDA reviewed", "official": false },
+      { "id": "MS2", "name": "Baseline ready", "date": "2026-11-01", "criteria": "Preprocessing pipeline with tests; NB and LR baselines logged in MLflow", "official": false },
+      { "id": "MS3", "name": "Advanced models trained", "date": "2026-11-15", "criteria": "BiLSTM and at least one fine-tuned Transformer evaluated on the test set", "official": false },
+      { "id": "MS4", "name": "Evaluation complete", "date": "2026-11-22", "criteria": "Model comparison, confusion matrices, error analysis and sample predictions; best model registered", "official": false },
+      { "id": "MS5", "name": "Deployment & demo (optional)", "date": "2026-11-29", "criteria": "Endpoint or demo app returns a label and confidence for single texts and CSV files", "official": false },
+      { "id": "MS6", "name": "Final presentation", "date": "2026-12-04", "criteria": "Final documentation, README and presentation delivered", "official": true }
+    ]
+  }
+}

@@ -1,0 +1,208 @@
+<!-- ============================ PART 3 ============================ -->
+<section class="part-start">
+<div class="part-kicker">Part 3</div>
+<h1 id="part3">3. Requirements Gathering</h1>
+<p class="part-intro">Who SentiLingo serves, what it must do, how well it must do it, and the data and tools it needs.</p>
+</section>
+
+<h2 id="s3-1">3.1 Elicitation Approach</h2>
+<p>Requirements were gathered from five sources:</p>
+<ol>
+  <li>the DEPI project brief, which defines the mandatory scope;</li>
+  <li>the review of existing solutions in Part 2;</li>
+  <li>a team workshop in which members played the stakeholders listed below;</li>
+  <li>inspection of the candidate datasets;</li>
+  <li>guidance from the technical instructor.</li>
+</ol>
+<p>Each requirement has an ID and a MoSCoW priority: <span class="pill must">Must</span>, <span class="pill should">Should</span> or <span class="pill could">Could</span>.</p>
+
+<h2 id="s3-2">3.2 Stakeholders &amp; Their Needs</h2>
+<table class="compact">
+  <thead><tr><th style="width:30%">Stakeholder</th><th style="width:70%">Key needs</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Customer-experience (CX) managers</strong></td><td>Reliable sentiment figures per language and channel; batch analysis; results they can export</td></tr>
+    <tr><td><strong>Support teams</strong></td><td>Negative feedback surfaced first, with a confidence score; works for Egyptian Arabic and Franco-Arabic</td></tr>
+    <tr><td><strong>Data scientists / ML engineers</strong></td><td>A reproducible, configurable pipeline; tracked experiments; easy retraining</td></tr>
+    <tr><td><strong>IT and security teams</strong></td><td>Secure, low-cost deployment; no leakage of customer data</td></tr>
+    <tr><td><strong>Management</strong></td><td>Evidence that the chosen model is accurate and cost-effective</td></tr>
+    <tr><td><strong>DEPI instructor and evaluators</strong></td><td>All brief deliverables, a sound method, and documentation delivered on time</td></tr>
+  </tbody>
+</table>
+
+<h2 id="s3-3">3.3 User Stories</h2>
+<table class="compact">
+  <thead><tr><th style="width:8%">ID</th><th style="width:52%">User story</th><th style="width:40%">Acceptance criteria</th></tr></thead>
+  <tbody>
+    <tr><td class="id">US-01</td><td>As a <strong>CX manager</strong>, I want to upload a CSV of feedback and get a sentiment label and confidence for every row.</td><td>10,000 rows processed; the output adds label, confidence and language.</td></tr>
+    <tr><td class="id">US-02</td><td>As a <strong>support agent</strong>, I want to paste one message in Arabic, English or Franco-Arabic and see its sentiment.</td><td>Result in under 1 second; Arabic shown right-to-left.</td></tr>
+    <tr><td class="id">US-03</td><td>As a <strong>data scientist</strong>, I want every run logged with its parameters, metrics and artefacts.</td><td>Each MLflow run holds all brief metrics and a confusion matrix.</td></tr>
+    <tr><td class="id">US-04</td><td>As a <strong>manager</strong>, I want all models compared on accuracy and speed.</td><td>A leaderboard shows macro-F1, per-language F1 and latency.</td></tr>
+    <tr><td class="id">US-05</td><td>As an <strong>evaluator</strong>, I want to reproduce the reported results.</td><td>Following the README from a fresh clone reproduces the test metrics.</td></tr>
+  </tbody>
+</table>
+
+<h2 id="s3-4">3.4 Functional Requirements</h2>
+<table class="compact">
+  <thead><tr><th style="width:8%">ID</th><th style="width:80%">Requirement</th><th class="c" style="width:12%">Priority</th></tr></thead>
+  <tbody>
+    <tr><td class="id">FR-01</td><td>Load labelled data from several sources into one schema: text, label, language, source, split.</td><td class="c"><span class="pill must">Must</span></td></tr>
+    <tr><td class="id">FR-02</td><td>Map each source's labels or star ratings to Negative, Neutral and Positive using a documented policy.</td><td class="c"><span class="pill must">Must</span></td></tr>
+    <tr><td class="id">FR-03</td><td>Remove duplicates, then create stratified train / validation / test splits with a fixed seed. The test set is frozen.</td><td class="c"><span class="pill must">Must</span></td></tr>
+    <tr><td class="id">FR-04</td><td>Detect the language or script of each text: Arabic, English or Franco-Arabic.</td><td class="c"><span class="pill should">Should</span></td></tr>
+    <tr><td class="id">FR-05</td><td>Clean text: mask URLs, mentions, e-mails and phone numbers; strip HTML; handle emojis; lower-case Latin script.</td><td class="c"><span class="pill must">Must</span></td></tr>
+    <tr><td class="id">FR-06</td><td>Normalise Arabic: remove diacritics and tatweel; unify alef forms (<span class="ar">أ إ آ</span> → <span class="ar">ا</span>) and <span class="ar">ى</span> → <span class="ar">ي</span>; reduce repeated letters.</td><td class="c"><span class="pill must">Must</span></td></tr>
+    <tr><td class="id">FR-07</td><td>Tokenise text: word level for the classical and LSTM models, subwords for Transformers. Negation words are kept.</td><td class="c"><span class="pill must">Must</span></td></tr>
+    <tr><td class="id">FR-08</td><td>Build TF-IDF features with word and character n-grams.</td><td class="c"><span class="pill must">Must</span></td></tr>
+    <tr><td class="id">FR-09</td><td>Train Naive Bayes and Logistic Regression with cross-validated tuning.</td><td class="c"><span class="pill must">Must</span></td></tr>
+    <tr><td class="id">FR-10</td><td>Train a BiLSTM classifier.</td><td class="c"><span class="pill must">Must</span></td></tr>
+    <tr><td class="id">FR-11</td><td>Fine-tune at least one pretrained Transformer, multilingual and/or Arabic.</td><td class="c"><span class="pill must">Must</span></td></tr>
+    <tr><td class="id">FR-12</td><td>Report accuracy, precision, recall, F1 (macro and per class) and the confusion matrix, overall and per language.</td><td class="c"><span class="pill must">Must</span></td></tr>
+    <tr><td class="id">FR-13</td><td>Compare preprocessing strategies and models in one leaderboard.</td><td class="c"><span class="pill must">Must</span></td></tr>
+    <tr><td class="id">FR-14</td><td>Log every run to MLflow and register the best model.</td><td class="c"><span class="pill must">Must</span></td></tr>
+    <tr><td class="id">FR-15</td><td>Produce an error analysis and a table of sample predictions.</td><td class="c"><span class="pill must">Must</span></td></tr>
+    <tr><td class="id">FR-16</td><td>Predict single texts and CSV files, returning a label and a confidence score.</td><td class="c"><span class="pill should">Should</span></td></tr>
+    <tr><td class="id">FR-17</td><td>Provide a Streamlit demo that shows Arabic right-to-left.</td><td class="c"><span class="pill should">Should</span></td></tr>
+    <tr><td class="id">FR-18</td><td>Serve the best model from an Azure ML online endpoint (REST, key authentication).</td><td class="c"><span class="pill could">Could</span></td></tr>
+    <tr><td class="id">FR-19</td><td>Provide a README and a model card.</td><td class="c"><span class="pill must">Must</span></td></tr>
+  </tbody>
+</table>
+
+<h2 id="s3-5">3.5 Non-Functional Requirements</h2>
+<table class="compact">
+  <thead><tr><th style="width:9%">ID</th><th style="width:17%">Category</th><th style="width:74%">Requirement</th></tr></thead>
+  <tbody>
+    <tr><td class="id">NFR-01</td><td>Performance</td><td>The selected model meets KPIs K1–K3 (target macro-F1 ≥ 0.75).</td></tr>
+    <tr><td class="id">NFR-02</td><td>Performance</td><td>One text is scored on CPU in ≤ 20 ms (baseline) or ≤ 300 ms (Transformer).</td></tr>
+    <tr><td class="id">NFR-03</td><td>Security</td><td>No API keys or tokens in the repository; secrets come from environment variables.</td></tr>
+    <tr><td class="id">NFR-04</td><td>Privacy</td><td>Personal data (handles, e-mails, phone numbers) is masked, and raw third-party data is never committed.</td></tr>
+    <tr><td class="id">NFR-05</td><td>Usability</td><td>A first-time user can score a CSV file in under 2 minutes; Arabic is displayed right-to-left.</td></tr>
+    <tr><td class="id">NFR-06</td><td>Reproducibility</td><td>Fixed seeds, pinned dependencies and versioned splits; a re-run reproduces macro-F1 within ±0.01.</td></tr>
+    <tr><td class="id">NFR-07</td><td>Reliability</td><td>Empty, emoji-only, mixed-script or very long inputs never crash the pipeline.</td></tr>
+    <tr><td class="id">NFR-08</td><td>Maintainability</td><td>Modular code in <span class="mono">src/</span>, with unit tests for preprocessing and evaluation.</td></tr>
+    <tr><td class="id">NFR-09</td><td>Fairness</td><td>Results are reported per language, and the Arabic–English macro-F1 gap stays within 10 points.</td></tr>
+    <tr><td class="id">NFR-10</td><td>Compliance</td><td>Datasets and models are used under their licences, and all sources are cited.</td></tr>
+  </tbody>
+</table>
+
+<h2 id="s3-6">3.6 Data Requirements</h2>
+<table class="compact">
+  <thead><tr><th style="width:12%">Label</th><th style="width:31%">Definition</th><th style="width:19%">English example</th><th style="width:19%">Egyptian Arabic example</th><th style="width:19%">Franco-Arabic example</th></tr></thead>
+  <tbody>
+    <tr><td><span class="pill" style="background:#fde2df;color:#9b2c22">Negative</span></td><td>Dissatisfaction, a complaint or criticism</td><td>"The order arrived broken."</td><td class="ar">الطلب وصل مكسور</td><td>"el order wesel maksour"</td></tr>
+    <tr><td><span class="pill" style="background:#e7eaef;color:#4b5563">Neutral</span></td><td>No clear sentiment: facts, questions or balanced opinions</td><td>"When does the store open?"</td><td class="ar">المحل بيفتح الساعة كام؟</td><td>"el ma7al beyefta7 emta?"</td></tr>
+    <tr><td><span class="pill" style="background:#dff1e6;color:#1f6b41">Positive</span></td><td>Satisfaction, praise or a recommendation</td><td>"Fast delivery, thank you!"</td><td class="ar">التوصيل سريع، شكرًا</td><td>"el delivery saree3, shokran"</td></tr>
+  </tbody>
+</table>
+<p><strong>Label mapping:</strong> star ratings 1–2 → Negative, 3 → Neutral, 4–5 → Positive. Source labels such as <em>objective</em> or <em>mixed</em> map to Neutral, and mixed items are flagged so they can be analysed separately.</p>
+
+<table class="compact">
+  <thead><tr><th style="width:21%">Candidate dataset</th><th style="width:16%">Language</th><th style="width:14%">Domain</th><th style="width:13%">Size</th><th style="width:13%">Licence</th><th style="width:23%">Planned use</th></tr></thead>
+  <tbody>
+    <tr><td><strong>HARD</strong> (Elnagar et al., 2018)</td><td>MSA and dialects</td><td>Hotel reviews</td><td>≈ 374k reviews, rated 1–5</td><td>None declared</td><td>Main Arabic training data</td></tr>
+    <tr><td><strong>ASTD</strong> (Nabil et al., 2015)</td><td>Egyptian and MSA</td><td>Tweets</td><td>10,006</td><td>GPL-2.0</td><td>Egyptian-dialect training data</td></tr>
+    <tr><td><strong>Twitter US Airline Sentiment</strong> (CrowdFlower, n.d.)</td><td>English</td><td>Customer-service tweets</td><td>14,640</td><td>CC BY-NC-SA 4.0</td><td>Main English training data</td></tr>
+    <tr><td><strong>SemEval-2017 Task 4A</strong> (Rosenthal et al., 2017)</td><td>Arabic, English</td><td>Tweets</td><td>9,455 Arabic; 62,617 English</td><td>Free use beyond SemEval</td><td>Extra three-class training data and a benchmark</td></tr>
+    <tr><td><strong>UMSAB</strong> (Barbieri et al., 2022)</td><td>8 languages, including Arabic and English</td><td>Tweets</td><td>3,030 per language</td><td>CC BY 3.0</td><td>External multilingual benchmark</td></tr>
+    <tr><td><strong>JERD</strong> — Jumia Egypt Reviews (aliallam13, 2026)</td><td>Egyptian, MSA, English, Franco-Arabic</td><td>E-commerce reviews</td><td>3,809</td><td>CC BY-NC-ND 4.0</td><td>Held-out test set of real Egyptian feedback</td></tr>
+  </tbody>
+</table>
+<ul>
+  <li>At least 10,000 labelled texts per core language after cleaning, and every test slice contains all three classes.</li>
+  <li>Splits are 70 / 15 / 15, stratified by language and label. The test set is frozen at MS1.</li>
+  <li>Duplicates are removed before splitting, licences are recorded for each source, and raw data is not committed.</li>
+</ul>
+
+<h2 id="s3-7">3.7 Technology Stack</h2>
+<table class="compact">
+  <thead><tr><th style="width:25%">Layer</th><th style="width:75%">Tools</th></tr></thead>
+  <tbody>
+    <tr><td>Language and environment</td><td>Python 3.10+, Jupyter, Google Colab, Kaggle</td></tr>
+    <tr><td>Data and preprocessing</td><td>pandas, Hugging Face Datasets, regular expressions, NLTK, Arabic normalisation utilities</td></tr>
+    <tr><td>Classical ML</td><td>scikit-learn: TF-IDF, Naive Bayes, Logistic Regression, Pipelines</td></tr>
+    <tr><td>Deep learning</td><td>TensorFlow / Keras for the BiLSTM; Hugging Face Transformers on PyTorch</td></tr>
+    <tr><td>Experiment tracking</td><td>MLflow (Zaharia et al., 2018)</td></tr>
+    <tr><td>Serving and collaboration</td><td>Azure Machine Learning, Streamlit; GitHub Issues, Projects and pull requests</td></tr>
+  </tbody>
+</table>
+
+<h2 id="s3-8">3.8 Use-Case Model</h2>
+<div class="fig">
+<svg viewBox="0 0 1000 385" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial, sans-serif">
+  <rect x="245.5" y="6.5" width="510" height="372" rx="10" fill="#f8fafc" stroke="#17324d" stroke-width="1.5"/>
+  <text x="500" y="27" text-anchor="middle" font-size="14" font-weight="700" fill="#17324d">SentiLingo platform</text>
+
+  <!-- actor helper: stick figures -->
+  <g stroke="#17324d" stroke-width="2" fill="none">
+    <circle cx="110" cy="72" r="10"/><line x1="110" y1="82" x2="110" y2="108"/><line x1="94" y1="92" x2="126" y2="92"/><line x1="110" y1="108" x2="98" y2="128"/><line x1="110" y1="108" x2="122" y2="128"/>
+    <circle cx="110" cy="232" r="10"/><line x1="110" y1="242" x2="110" y2="268"/><line x1="94" y1="252" x2="126" y2="252"/><line x1="110" y1="268" x2="98" y2="288"/><line x1="110" y1="268" x2="122" y2="288"/>
+    <circle cx="890" cy="62" r="10"/><line x1="890" y1="72" x2="890" y2="98"/><line x1="874" y1="82" x2="906" y2="82"/><line x1="890" y1="98" x2="878" y2="118"/><line x1="890" y1="98" x2="902" y2="118"/>
+    <circle cx="890" cy="207" r="10"/><line x1="890" y1="217" x2="890" y2="243"/><line x1="874" y1="227" x2="906" y2="227"/><line x1="890" y1="243" x2="878" y2="263"/><line x1="890" y1="243" x2="902" y2="263"/>
+  </g>
+  <g font-size="13" font-weight="600" fill="#17324d" text-anchor="middle">
+    <text x="110" y="148">CX Manager</text>
+    <text x="110" y="308">Support Agent</text>
+    <text x="890" y="138">Data Scientist</text>
+    <text x="890" y="283">MLOps Engineer</text>
+  </g>
+  <rect x="832" y="318" width="116" height="48" rx="4" fill="#ffffff" stroke="#17324d" stroke-width="1.5"/>
+  <text x="890" y="337" text-anchor="middle" font-size="11" fill="#5b6675">«system»</text>
+  <text x="890" y="356" text-anchor="middle" font-size="13" font-weight="600" fill="#17324d">Client app / CRM</text>
+
+  <!-- use cases: left column -->
+  <g fill="#ffffff" stroke="#12707a" stroke-width="1.6">
+    <ellipse cx="380" cy="72" rx="112" ry="25"/>
+    <ellipse cx="380" cy="150" rx="112" ry="25"/>
+    <ellipse cx="380" cy="228" rx="112" ry="25"/>
+    <ellipse cx="380" cy="306" rx="112" ry="25"/>
+    <ellipse cx="622" cy="66" rx="112" ry="25"/>
+    <ellipse cx="622" cy="134" rx="112" ry="25"/>
+    <ellipse cx="622" cy="202" rx="112" ry="25"/>
+    <ellipse cx="622" cy="270" rx="112" ry="25"/>
+    <ellipse cx="622" cy="338" rx="112" ry="25"/>
+  </g>
+  <g font-size="13" fill="#1f2933" text-anchor="middle">
+    <text x="380" y="76.5">Score a CSV file (batch)</text>
+    <text x="380" y="154.5">View sentiment dashboard</text>
+    <text x="380" y="232.5">Filter &amp; export results</text>
+    <text x="380" y="310.5">Analyse a single text</text>
+    <text x="622" y="70.5">Train &amp; tune models</text>
+    <text x="622" y="138.5">Review error analysis</text>
+    <text x="622" y="206.5">Compare runs in MLflow</text>
+    <text x="622" y="274.5">Register &amp; deploy model</text>
+    <text x="622" y="342.5">Call prediction REST API</text>
+  </g>
+
+  <!-- associations -->
+  <g stroke="#5b6675" stroke-width="1.3">
+    <line x1="128" y1="94" x2="268" y2="76"/>
+    <line x1="128" y1="98" x2="269" y2="146"/>
+    <line x1="128" y1="102" x2="273" y2="220"/>
+    <line x1="128" y1="250" x2="270" y2="234"/>
+    <line x1="128" y1="258" x2="270" y2="302"/>
+    <line x1="872" y1="80" x2="734" y2="66"/>
+    <line x1="872" y1="88" x2="732" y2="136"/>
+    <line x1="872" y1="96" x2="730" y2="198"/>
+    <line x1="872" y1="226" x2="732" y2="208"/>
+    <line x1="872" y1="234" x2="734" y2="268"/>
+    <line x1="832" y1="342" x2="734" y2="338"/>
+  </g>
+</svg>
+</div>
+<div class="caption">Figure 3 — Use-case diagram: business users (left) consume predictions; technical users and external systems (right) build, deploy and integrate the model.</div>
+
+<h2 id="s3-9">3.9 Traceability to the Brief</h2>
+<table class="compact">
+  <thead><tr><th style="width:50%">Brief item</th><th style="width:28%">Requirements</th><th style="width:22%">Deliverable</th></tr></thead>
+  <tbody>
+    <tr><td>Dataset</td><td>FR-01 – FR-04</td><td>D1</td></tr>
+    <tr><td>Text cleaning, tokenisation</td><td>FR-05 – FR-07</td><td>D2</td></tr>
+    <tr><td>TF-IDF, n-grams, Naive Bayes / Logistic Regression</td><td>FR-08, FR-09</td><td>D3</td></tr>
+    <tr><td>RNN / LSTM or pretrained Hugging Face Transformer</td><td>FR-10, FR-11</td><td>D4</td></tr>
+    <tr><td>Accuracy, precision, recall, F1, confusion matrix</td><td>FR-12</td><td>D5</td></tr>
+    <tr><td>Compare preprocessing strategies and models</td><td>FR-13</td><td>D5</td></tr>
+    <tr><td>Track experiments using MLflow</td><td>FR-14</td><td>D6</td></tr>
+    <tr><td>Error analysis, sample predictions</td><td>FR-15</td><td>D7, D8</td></tr>
+    <tr><td>README</td><td>FR-19</td><td>D9</td></tr>
+    <tr><td><em>Optional:</em> Azure ML endpoint</td><td>FR-18</td><td>D10</td></tr>
+  </tbody>
+</table>

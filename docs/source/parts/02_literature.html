@@ -1,0 +1,79 @@
+<!-- ============================ PART 2 ============================ -->
+<section class="part-start">
+<div class="part-kicker">Part 2</div>
+<h1 id="part2">2. Literature Review</h1>
+<p class="part-intro">Related research and existing solutions, what SentiLingo borrows from them, and where it differs.</p>
+</section>
+
+<h2 id="s2-1">2.1 Review Method</h2>
+<p>We searched the ACL Anthology, Google Scholar, arXiv and vendor documentation for work on the sentiment of reviews and social-media text, focusing on Arabic, Egyptian dialect and multilingual models. Every figure quoted below was checked against the original source (October 2026).</p>
+
+<h2 id="s2-2">2.2 Background and Challenges</h2>
+<p>Sentiment analysis classifies the opinion expressed in a text. Customer feedback makes this hard: messages are short and informal, often mix praise and complaints, and neutral messages are hard to label consistently. Arabic adds further difficulties:</p>
+<ul>
+  <li>rich morphology and inconsistent spelling (e.g. <span class="ar">أ/ا</span>, <span class="ar">ى/ي</span>);</li>
+  <li>dialects such as Egyptian Arabic that differ from MSA in vocabulary and grammar;</li>
+  <li>Franco-Arabic and code-switching with English, for which very few labelled resources exist (Hamed et al., 2025);</li>
+  <li>sarcasm and label noise, the main sources of the errors that remain in Arabic sentiment models (Abu Farha &amp; Magdy, 2021).</li>
+</ul>
+
+<h2 id="s2-3">2.3 Classical Approaches</h2>
+<p><strong>Lexicon-based</strong> tools such as VADER score text with a hand-built word list plus rules for negation and intensity. They need no training data but are English-only (Hutto &amp; Gilbert, 2014).</p>
+<p><strong>Supervised learning</strong> does better:</p>
+<ul>
+  <li>On movie reviews, Naive Bayes and SVM classifiers on word features reached 81–83% accuracy and beat keyword lists (Pang et al., 2002).</li>
+  <li>Adding word bigrams lifted a Naive Bayes–SVM hybrid to 91.2% (Wang &amp; Manning, 2012).</li>
+  <li>For Arabic, an SVM on TF-IDF n-grams scored 0.63 F1 on the four-class Egyptian tweet corpus ASTD (Nabil et al., 2015).</li>
+  <li>The best Arabic system at SemEval-2017 was a Naive Bayes model (Rosenthal et al., 2017).</li>
+</ul>
+<p>These models are fast, cheap, interpretable and effective with modest data. However, they see no context beyond n-grams, are weak on negation and sarcasm, and break on unseen dialect spellings. This is the baseline required by the brief; SentiLingo adds character n-grams to handle spelling variation.</p>
+
+<h2 id="s2-4">2.4 Deep Learning and Transformers</h2>
+<p><strong>LSTMs</strong> (Hochreiter &amp; Schmidhuber, 1997) read text as a sequence and can learn effects such as the scope of a negation. They need more data and tuning than linear models.</p>
+<p><strong>Pretrained Transformers</strong> are first trained on large text corpora and then fine-tuned for the task:</p>
+<ul>
+  <li>BERT reached 94.9% on a standard English sentiment benchmark (Devlin et al., 2019).</li>
+  <li>XLM-R extends this approach to 100 languages (Conneau et al., 2020).</li>
+  <li>XLM-T, a Twitter-adapted version of XLM-R, reached macro-F1 66.9 on Arabic and 70.6 on English three-class tweets (Barbieri et al., 2022).</li>
+</ul>
+<p><strong>Arabic-specific models</strong> do better on Arabic:</p>
+<ul>
+  <li>AraBERT reached 92.6% accuracy on the balanced ASTD, against 80.1% for multilingual BERT (Antoun et al., 2020).</li>
+  <li>MARBERT, pretrained on one billion dialect-rich tweets, beat both XLM-R and multilingual BERT on SemEval-2017 Arabic (Abdul-Mageed et al., 2021).</li>
+</ul>
+<p><strong>Large language models</strong> can classify sentiment without any training. They do well on simple tasks but trail fine-tuned smaller models on harder ones, and they cost much more per prediction (Zhang et al., 2024).</p>
+
+<h2 id="s2-5">2.5 Arabic and Egyptian-Dialect Studies</h2>
+<p>The study closest to SentiLingo compared a TF-IDF SVM, an LSTM, multilingual BERT and Arabic BERT models on 40,000 Egyptian tweets (Abu Kwaik et al., 2022). The SVM (0.84 accuracy) matched multilingual BERT (0.83), a Twitter-adapted Arabic BERT was best (0.91) and the LSTM was weakest (0.49); the study used two classes only. A re-implementation of published Arabic methods found that Transformers gave the best F-scores: 0.69 on SemEval-2017 and 0.76 on ASTD (Abu Farha &amp; Magdy, 2021). For code-switched feedback, a corpus of 4,100 Egyptian Arabic–English comments reached an F1 of about 0.93, both with neural models and with a fine-tuned GPT-3.5 (Sherif &amp; Sabty, 2025).</p>
+
+<h2 id="s2-6">2.6 Existing Solutions</h2>
+<table class="compact">
+  <thead><tr><th style="width:21%">Solution</th><th style="width:13%">Type</th><th style="width:14%">Arabic support</th><th style="width:24%">Strengths</th><th style="width:28%">Weaknesses</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Azure Language</strong> sentiment analysis (Microsoft, 2026)</td><td>Cloud API</td><td>Generic Arabic</td><td>Managed; labels with confidence per sentence and per document</td><td>Cannot be customised to the user's data; the feature retires on 31 Mar 2029</td></tr>
+    <tr><td><strong>Amazon Comprehend</strong> (Amazon Web Services, n.d.)</td><td>Cloud API</td><td>Generic Arabic</td><td>Managed; batch jobs; four labels including Mixed</td><td>Entity-level sentiment in English only; pay per use</td></tr>
+    <tr><td><strong>Google Cloud Natural Language</strong> (Google Cloud, n.d.)</td><td>Cloud API</td><td>Generic Arabic</td><td>Simple score and magnitude for each sentence</td><td>No class labels, so thresholds must be set; no customisation within the API</td></tr>
+    <tr><td><strong>VADER</strong> (Hutto &amp; Gilbert, 2014)</td><td>Open-source lexicon</td><td>None</td><td>Free, fast, no training needed</td><td>English only; misses domain and dialect words</td></tr>
+    <tr><td><strong>Twitter-XLM-R sentiment model</strong> (Barbieri et al., 2022)</td><td>Open pretrained model</td><td>8 languages, including Arabic</td><td>One multilingual model, ready to use</td><td>Trained on tweets; about 0.67 macro-F1 on Arabic</td></tr>
+  </tbody>
+</table>
+<div class="caption">Table 2.1 — Ready-made options. None of the cloud APIs lists Egyptian Arabic or Franco-Arabic as a supported variety.</div>
+
+<h2 id="s2-7">2.7 Gap Analysis</h2>
+<table class="compact">
+  <thead><tr><th style="width:5%">#</th><th style="width:47%">Gap in existing work</th><th style="width:48%">SentiLingo response</th></tr></thead>
+  <tbody>
+    <tr><td class="id">G1</td><td>Egyptian dialect and Franco-Arabic are poorly covered by ready-made tools</td><td>One pipeline for MSA, Egyptian Arabic, English and Franco-Arabic, evaluated per language</td></tr>
+    <tr><td class="id">G2</td><td>Classical and Transformer models are rarely compared on the same data; studies often use one dataset and two classes</td><td>The same frozen splits, seeds and metrics for every model family, with three classes</td></tr>
+    <tr><td class="id">G3</td><td>Commercial APIs cannot be customised and can be retired</td><td>An owned model that can be retrained on company data</td></tr>
+    <tr><td class="id">G4</td><td>Published results are hard to reproduce</td><td>Every run tracked in MLflow, with reproduction steps in the README</td></tr>
+    <tr><td class="id">G5</td><td>LLMs are costly per prediction</td><td>Fine-tuned compact models, with latency reported next to accuracy</td></tr>
+  </tbody>
+</table>
+
+<h2 id="s2-8">2.8 Lessons Applied</h2>
+<ol>
+  <li>Tune the classical baseline carefully, with word and character n-grams, and keep negation words.</li>
+  <li>Compare a multilingual Transformer with a dialect-aware Arabic model.</li>
+  <li>Report macro-F1 and per-class metrics, with realistic targets: about 0.67–0.71 macro-F1 is already strong for three-class tweets.</li>
+</ol>

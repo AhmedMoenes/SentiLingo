@@ -1,0 +1,59 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Virtual environments and secrets
+.venv/
+venv/
+env/
+.env
+.env.*
+*.pem
+*.key
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data (download scripts and the data card are committed; the data itself is not)
+data/raw/
+data/interim/
+data/processed/
+data/external/
+*.parquet
+*.feather
+
+# Experiment tracking and model artefacts
+mlruns/
+mlartifacts/
+/models/
+/checkpoints/
+/outputs/
+*.ckpt
+*.pt
+*.pth
+*.bin
+*.safetensors
+*.h5
+*.keras
+*.onnx
+
+# Tooling
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Course material kept locally only
+Brief.pdf
