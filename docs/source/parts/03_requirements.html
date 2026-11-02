@@ -6,26 +6,52 @@
 </section>
 
 <h2 id="s3-1">3.1 Elicitation Approach</h2>
-<p>Requirements were gathered from five sources:</p>
+<p>Requirements were consolidated from five evidence sources:</p>
 <ol>
-  <li>the DEPI project brief, which defines the mandatory scope;</li>
-  <li>the review of existing solutions in Part 2;</li>
-  <li>a team workshop in which members played the stakeholders listed below;</li>
-  <li>inspection of the candidate datasets;</li>
-  <li>guidance from the technical instructor.</li>
+  <li>the DEPI submission request and course learning outcomes;</li>
+  <li>the approved scope and design decisions in Part 1;</li>
+  <li>the research and existing-solution review in Part 2;</li>
+  <li>inspection of candidate datasets, licences and sample records;</li>
+  <li>delivery constraints: five weeks, limited team availability, local-first demonstration and zero budget.</li>
 </ol>
-<p>Each requirement has an ID and a MoSCoW priority: <span class="pill must">Must</span>, <span class="pill should">Should</span> or <span class="pill could">Could</span>.</p>
+<p>Instructor confirmation is still required for the exact submission deadline and whether Azure or BiLSTM is mandatory. Until that evidence exists, neither is allowed to displace the required local release. Each requirement has an ID and a MoSCoW priority: <span class="pill must">Must</span>, <span class="pill should">Should</span> or <span class="pill could">Could</span>.</p>
 
-<h2 id="s3-2">3.2 Stakeholders &amp; Their Needs</h2>
+<h2 id="s3-2">3.2 Stakeholder Analysis</h2>
+<p>The primary business user is the <strong>customer-experience manager</strong>, who needs a practical way to review multilingual feedback. The DEPI instructor and evaluators have the greatest formal influence because they judge scope, evidence and delivery. The project team owns implementation decisions, while dataset providers constrain lawful use.</p>
 <table class="compact">
-  <thead><tr><th style="width:30%">Stakeholder</th><th style="width:70%">Key needs</th></tr></thead>
+  <thead><tr><th style="width:22%">Stakeholder</th><th class="c" style="width:10%">Influence</th><th class="c" style="width:10%">Interest</th><th style="width:30%">Main need</th><th style="width:28%">Engagement and evidence</th></tr></thead>
   <tbody>
-    <tr><td><strong>Customer-experience (CX) managers</strong></td><td>Reliable sentiment figures per language and channel; batch analysis; results they can export</td></tr>
-    <tr><td><strong>Support teams</strong></td><td>Negative feedback surfaced first, with a confidence score; works for Egyptian Arabic and Franco-Arabic</td></tr>
-    <tr><td><strong>Data scientists / ML engineers</strong></td><td>A reproducible, configurable pipeline; tracked experiments; easy retraining</td></tr>
-    <tr><td><strong>IT and security teams</strong></td><td>Secure, low-cost deployment; no leakage of customer data</td></tr>
-    <tr><td><strong>Management</strong></td><td>Evidence that the chosen model is accurate and cost-effective</td></tr>
-    <tr><td><strong>DEPI instructor and evaluators</strong></td><td>All brief deliverables, a sound method, and documentation delivered on time</td></tr>
+    <tr><td><strong>DEPI instructor and evaluators</strong></td><td class="c">High</td><td class="c">High</td><td>Rubric compliance, defensible methodology, honest results and complete links delivered on time</td><td>Confirm open requirements; provide documentation, repository evidence, presentation and demonstration</td></tr>
+    <tr><td><strong>Five-person project team</strong></td><td class="c">High</td><td class="c">High</td><td>Clear ownership, achievable workload, shared learning and early warning when work slips</td><td>Weekly planning and review; GitHub issues, pull requests and decision log</td></tr>
+    <tr><td><strong>Customer-experience manager</strong></td><td class="c">Medium</td><td class="c">High</td><td>Understand overall and per-language sentiment, analyse CSV feedback and export useful results</td><td>Validate the primary workflow, output columns, explanations and representative examples</td></tr>
+    <tr><td><strong>Support employee or demo user</strong></td><td class="c">Low</td><td class="c">High</td><td>Paste one English, MSA or Egyptian Arabic message and receive a clear result without technical knowledge</td><td>Review wireframes and test empty, Arabic, mixed-text and low-confidence cases</td></tr>
+    <tr><td><strong>Dataset and model providers</strong></td><td class="c">Medium</td><td class="c">Medium</td><td>Licence compliance, attribution and no unauthorised redistribution</td><td>Maintain source register, licence record, citations and raw-data exclusion policy</td></tr>
+    <tr><td><strong>Future technical reviewers</strong></td><td class="c">Low</td><td class="c">Medium</td><td>Readable repository, reproducible experiments and honest limitations</td><td>README, data card, model card, experiment evidence and clean-environment test</td></tr>
+  </tbody>
+</table>
+
+<h3>Power and Interest Strategy</h3>
+<table class="compact">
+  <thead><tr><th style="width:24%">Strategy</th><th style="width:31%">Stakeholders</th><th style="width:45%">Project response</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Manage closely</strong><br>High influence, high interest</td><td>DEPI instructor and evaluators; project team</td><td>Resolve requirements early, expose risks, review evidence weekly and obtain explicit approval for scope changes</td></tr>
+    <tr><td><strong>Keep satisfied</strong><br>High influence, lower daily interest</td><td>Programme administration; dataset and model providers</td><td>Submit accessible links on time and comply with licences, attribution and redistribution restrictions</td></tr>
+    <tr><td><strong>Keep informed</strong><br>Lower influence, high interest</td><td>CX manager; support employee or demo user</td><td>Validate the user flow, labels, CSV contract, Arabic display, explanations and error behaviour</td></tr>
+    <tr><td><strong>Monitor</strong><br>Lower influence, lower immediate interest</td><td>Future technical reviewers</td><td>Keep documentation, repository history and reproducibility evidence understandable without adding portfolio-only scope</td></tr>
+  </tbody>
+</table>
+
+<h3>Team Responsibility Model</h3>
+<p>Each official member is assigned one operating role in the weekly plan. Names may rotate between roles, but every work item must retain exactly one accountable owner. R = responsible, A = accountable, C = consulted and I = informed.</p>
+<table class="compact">
+  <thead><tr><th style="width:31%">Work item</th><th class="c">Project coordinator</th><th class="c">Data owner</th><th class="c">Model owner</th><th class="c">Application owner</th><th class="c">Documentation owner</th></tr></thead>
+  <tbody>
+    <tr><td>Scope, schedule, risks and stakeholder decisions</td><td class="c"><strong>A/R</strong></td><td class="c">C</td><td class="c">C</td><td class="c">C</td><td class="c">R</td></tr>
+    <tr><td>Dataset sources, licences, schema, audit and splits</td><td class="c">A</td><td class="c"><strong>R</strong></td><td class="c">C</td><td class="c">I</td><td class="c">C</td></tr>
+    <tr><td>Preprocessing, classical and advanced experiments</td><td class="c">I</td><td class="c">C</td><td class="c"><strong>A/R</strong></td><td class="c">C</td><td class="c">I</td></tr>
+    <tr><td>Validation policy, locked test and error analysis</td><td class="c">A</td><td class="c">C</td><td class="c"><strong>R</strong></td><td class="c">I</td><td class="c">C</td></tr>
+    <tr><td>Prediction contract, Streamlit and integration tests</td><td class="c">C</td><td class="c">I</td><td class="c">C</td><td class="c"><strong>A/R</strong></td><td class="c">C</td></tr>
+    <tr><td>README, report, presentation, video and link verification</td><td class="c">A</td><td class="c">I</td><td class="c">C</td><td class="c">C</td><td class="c"><strong>R</strong></td></tr>
   </tbody>
 </table>
 
@@ -33,11 +59,11 @@
 <table class="compact">
   <thead><tr><th style="width:8%">ID</th><th style="width:52%">User story</th><th style="width:40%">Acceptance criteria</th></tr></thead>
   <tbody>
-    <tr><td class="id">US-01</td><td>As a <strong>CX manager</strong>, I want to upload a CSV of feedback and get a sentiment label and confidence for every row.</td><td>10,000 rows processed; the output adds label, confidence and language.</td></tr>
-    <tr><td class="id">US-02</td><td>As a <strong>support agent</strong>, I want to paste one message in Arabic, English or Franco-Arabic and see its sentiment.</td><td>Result in under 1 second; Arabic shown right-to-left.</td></tr>
-    <tr><td class="id">US-03</td><td>As a <strong>data scientist</strong>, I want every run logged with its parameters, metrics and artefacts.</td><td>Each MLflow run holds all brief metrics and a confusion matrix.</td></tr>
-    <tr><td class="id">US-04</td><td>As a <strong>manager</strong>, I want all models compared on accuracy and speed.</td><td>A leaderboard shows macro-F1, per-language F1 and latency.</td></tr>
-    <tr><td class="id">US-05</td><td>As an <strong>evaluator</strong>, I want to reproduce the reported results.</td><td>Following the README from a fresh clone reproduces the test metrics.</td></tr>
+    <tr><td class="id">US-01</td><td>As a <strong>CX manager</strong>, I want to upload a CSV of feedback and receive a sentiment result for every valid row.</td><td>The interface validates the required text column and exports row ID, language variety, label, confidence estimate and any error message.</td></tr>
+    <tr><td class="id">US-02</td><td>As a <strong>support employee</strong>, I want to paste one English, MSA or Egyptian Arabic message and understand the prediction.</td><td>Arabic is displayed right-to-left; the result shows label, confidence estimate, detected variety and a limitation notice.</td></tr>
+    <tr><td class="id">US-03</td><td>As an <strong>ML engineer</strong>, I want each experiment recorded so that I can compare or reproduce it.</td><td>The record identifies data and split versions, preprocessing, model, parameters, seed, hardware, duration, metrics and artefact location.</td></tr>
+    <tr><td class="id">US-04</td><td>As a <strong>project evaluator</strong>, I want models compared fairly without test-set tuning.</td><td>The validation leaderboard uses language-balanced macro-F1; the final report records one frozen-test evaluation after locking the configuration.</td></tr>
+    <tr><td class="id">US-05</td><td>As a <strong>presentation reviewer</strong>, I want the local demonstration to work without internet access.</td><td>A clean-environment checklist and offline fallback reproduce representative single-text and CSV predictions.</td></tr>
   </tbody>
 </table>
 
@@ -48,21 +74,21 @@
     <tr><td class="id">FR-01</td><td>Load labelled data from several sources into one schema: text, label, language, source, split.</td><td class="c"><span class="pill must">Must</span></td></tr>
     <tr><td class="id">FR-02</td><td>Map each source's labels or star ratings to Negative, Neutral and Positive using a documented policy.</td><td class="c"><span class="pill must">Must</span></td></tr>
     <tr><td class="id">FR-03</td><td>Remove duplicates, then create stratified train / validation / test splits with a fixed seed. The test set is frozen.</td><td class="c"><span class="pill must">Must</span></td></tr>
-    <tr><td class="id">FR-04</td><td>Detect the language or script of each text: Arabic, English or Franco-Arabic.</td><td class="c"><span class="pill should">Should</span></td></tr>
+    <tr><td class="id">FR-04</td><td>Preserve or assign one supported variety to each record: English, MSA or Egyptian Arabic; flag mixed or uncertain text for analysis.</td><td class="c"><span class="pill must">Must</span></td></tr>
     <tr><td class="id">FR-05</td><td>Clean text: mask URLs, mentions, e-mails and phone numbers; strip HTML; handle emojis; lower-case Latin script.</td><td class="c"><span class="pill must">Must</span></td></tr>
     <tr><td class="id">FR-06</td><td>Normalise Arabic: remove diacritics and tatweel; unify alef forms (<span class="ar">أ إ آ</span> → <span class="ar">ا</span>) and <span class="ar">ى</span> → <span class="ar">ي</span>; reduce repeated letters.</td><td class="c"><span class="pill must">Must</span></td></tr>
-    <tr><td class="id">FR-07</td><td>Tokenise text: word level for the classical and LSTM models, subwords for Transformers. Negation words are kept.</td><td class="c"><span class="pill must">Must</span></td></tr>
-    <tr><td class="id">FR-08</td><td>Build TF-IDF features with word and character n-grams.</td><td class="c"><span class="pill must">Must</span></td></tr>
-    <tr><td class="id">FR-09</td><td>Train Naive Bayes and Logistic Regression with cross-validated tuning.</td><td class="c"><span class="pill must">Must</span></td></tr>
-    <tr><td class="id">FR-10</td><td>Train a BiLSTM classifier.</td><td class="c"><span class="pill must">Must</span></td></tr>
-    <tr><td class="id">FR-11</td><td>Fine-tune at least one pretrained Transformer, multilingual and/or Arabic.</td><td class="c"><span class="pill must">Must</span></td></tr>
-    <tr><td class="id">FR-12</td><td>Report accuracy, precision, recall, F1 (macro and per class) and the confusion matrix, overall and per language.</td><td class="c"><span class="pill must">Must</span></td></tr>
-    <tr><td class="id">FR-13</td><td>Compare preprocessing strategies and models in one leaderboard.</td><td class="c"><span class="pill must">Must</span></td></tr>
-    <tr><td class="id">FR-14</td><td>Log every run to MLflow and register the best model.</td><td class="c"><span class="pill must">Must</span></td></tr>
+    <tr><td class="id">FR-07</td><td>Prepare word and character inputs for classical models and subword-tokenised inputs for Transformers while preserving negation evidence.</td><td class="c"><span class="pill must">Must</span></td></tr>
+    <tr><td class="id">FR-08</td><td>Compare word TF-IDF, character TF-IDF and their combined representation.</td><td class="c"><span class="pill must">Must</span></td></tr>
+    <tr><td class="id">FR-09</td><td>Train a dummy classifier, Multinomial Naive Bayes, Logistic Regression and Linear SVM on the same frozen splits.</td><td class="c"><span class="pill must">Must</span></td></tr>
+    <tr><td class="id">FR-10</td><td>Train a BiLSTM only when the instructor confirms it is mandatory or the core schedule remains safe.</td><td class="c"><span class="pill could">Could</span></td></tr>
+    <tr><td class="id">FR-11</td><td>Fine-tune XLM-R Base as the required advanced model; attempt MARBERT on the Arabic subset only under the documented stop rule.</td><td class="c"><span class="pill must">Must</span></td></tr>
+    <tr><td class="id">FR-12</td><td>Report the mean of per-language macro-F1 as the primary validation score, with accuracy, overall macro-F1, weighted F1, per-class metrics and confusion matrices as supporting evidence.</td><td class="c"><span class="pill must">Must</span></td></tr>
+    <tr><td class="id">FR-13</td><td>Select the full configuration using validation data, then evaluate the locked configuration once on the frozen test set.</td><td class="c"><span class="pill must">Must</span></td></tr>
+    <tr><td class="id">FR-14</td><td>Record every reported experiment with data version, split version, preprocessing, model, parameters, seed, hardware, duration, metrics and artefact location; MLflow may implement this record.</td><td class="c"><span class="pill must">Must</span></td></tr>
     <tr><td class="id">FR-15</td><td>Produce an error analysis and a table of sample predictions.</td><td class="c"><span class="pill must">Must</span></td></tr>
-    <tr><td class="id">FR-16</td><td>Predict single texts and CSV files, returning a label and a confidence score.</td><td class="c"><span class="pill should">Should</span></td></tr>
-    <tr><td class="id">FR-17</td><td>Provide a Streamlit demo that shows Arabic right-to-left.</td><td class="c"><span class="pill should">Should</span></td></tr>
-    <tr><td class="id">FR-18</td><td>Serve the best model from an Azure ML online endpoint (REST, key authentication).</td><td class="c"><span class="pill could">Could</span></td></tr>
+    <tr><td class="id">FR-16</td><td>Predict single texts and CSV files, returning a label, confidence estimate, supported variety and validation message.</td><td class="c"><span class="pill must">Must</span></td></tr>
+    <tr><td class="id">FR-17</td><td>Provide a local Streamlit application with Arabic right-to-left display, input validation, batch export and an offline presentation path.</td><td class="c"><span class="pill must">Must</span></td></tr>
+    <tr><td class="id">FR-18</td><td>Add FastAPI, Docker or Azure deployment only after the local application, evaluation, documentation and rehearsal are stable.</td><td class="c"><span class="pill could">Could</span></td></tr>
     <tr><td class="id">FR-19</td><td>Provide a README and a model card.</td><td class="c"><span class="pill must">Must</span></td></tr>
   </tbody>
 </table>
@@ -71,29 +97,29 @@
 <table class="compact">
   <thead><tr><th style="width:9%">ID</th><th style="width:17%">Category</th><th style="width:74%">Requirement</th></tr></thead>
   <tbody>
-    <tr><td class="id">NFR-01</td><td>Performance</td><td>The selected model meets KPIs K1–K3 (target macro-F1 ≥ 0.75).</td></tr>
-    <tr><td class="id">NFR-02</td><td>Performance</td><td>One text is scored on CPU in ≤ 20 ms (baseline) or ≤ 300 ms (Transformer).</td></tr>
+    <tr><td class="id">NFR-01</td><td>Evaluation</td><td>Model selection uses the approved validation metric and never uses final test results for tuning.</td></tr>
+    <tr><td class="id">NFR-02</td><td>Performance</td><td>Single-text and CSV latency, memory use and model size are measured on the presentation environment before a performance target is claimed.</td></tr>
     <tr><td class="id">NFR-03</td><td>Security</td><td>No API keys or tokens in the repository; secrets come from environment variables.</td></tr>
     <tr><td class="id">NFR-04</td><td>Privacy</td><td>Personal data (handles, e-mails, phone numbers) is masked, and raw third-party data is never committed.</td></tr>
-    <tr><td class="id">NFR-05</td><td>Usability</td><td>A first-time user can score a CSV file in under 2 minutes; Arabic is displayed right-to-left.</td></tr>
+    <tr><td class="id">NFR-05</td><td>Usability</td><td>A first-time user can complete single-text and CSV prediction from labelled controls; Arabic is displayed right-to-left and sentiment is not communicated by colour alone.</td></tr>
     <tr><td class="id">NFR-06</td><td>Reproducibility</td><td>Fixed seeds, pinned dependencies and versioned splits; a re-run reproduces macro-F1 within ±0.01.</td></tr>
     <tr><td class="id">NFR-07</td><td>Reliability</td><td>Empty, emoji-only, mixed-script or very long inputs never crash the pipeline.</td></tr>
     <tr><td class="id">NFR-08</td><td>Maintainability</td><td>Modular code in <span class="mono">src/</span>, with unit tests for preprocessing and evaluation.</td></tr>
-    <tr><td class="id">NFR-09</td><td>Fairness</td><td>Results are reported per language, and the Arabic–English macro-F1 gap stays within 10 points.</td></tr>
+    <tr><td class="id">NFR-09</td><td>Transparency</td><td>Results are reported separately for English, MSA and Egyptian Arabic, and material performance gaps are explained rather than hidden by an overall score.</td></tr>
     <tr><td class="id">NFR-10</td><td>Compliance</td><td>Datasets and models are used under their licences, and all sources are cited.</td></tr>
   </tbody>
 </table>
 
 <h2 id="s3-6">3.6 Data Requirements</h2>
 <table class="compact">
-  <thead><tr><th style="width:12%">Label</th><th style="width:31%">Definition</th><th style="width:19%">English example</th><th style="width:19%">Egyptian Arabic example</th><th style="width:19%">Franco-Arabic example</th></tr></thead>
+  <thead><tr><th style="width:12%">Label</th><th style="width:36%">Definition</th><th style="width:26%">English example</th><th style="width:26%">Arabic example</th></tr></thead>
   <tbody>
-    <tr><td><span class="pill" style="background:#fde2df;color:#9b2c22">Negative</span></td><td>Dissatisfaction, a complaint or criticism</td><td>"The order arrived broken."</td><td class="ar">الطلب وصل مكسور</td><td>"el order wesel maksour"</td></tr>
-    <tr><td><span class="pill" style="background:#e7eaef;color:#4b5563">Neutral</span></td><td>No clear sentiment: facts, questions or balanced opinions</td><td>"When does the store open?"</td><td class="ar">المحل بيفتح الساعة كام؟</td><td>"el ma7al beyefta7 emta?"</td></tr>
-    <tr><td><span class="pill" style="background:#dff1e6;color:#1f6b41">Positive</span></td><td>Satisfaction, praise or a recommendation</td><td>"Fast delivery, thank you!"</td><td class="ar">التوصيل سريع، شكرًا</td><td>"el delivery saree3, shokran"</td></tr>
+    <tr><td><span class="pill" style="background:#fde2df;color:#9b2c22">Negative</span></td><td>Dissatisfaction, a complaint or criticism</td><td>"The order arrived broken."</td><td class="ar">الطلب وصل مكسور</td></tr>
+    <tr><td><span class="pill" style="background:#e7eaef;color:#4b5563">Neutral</span></td><td>No clear sentiment: facts, questions or balanced opinions</td><td>"When does the store open?"</td><td class="ar">المحل بيفتح الساعة كام؟</td></tr>
+    <tr><td><span class="pill" style="background:#dff1e6;color:#1f6b41">Positive</span></td><td>Satisfaction, praise or a recommendation</td><td>"Fast delivery, thank you!"</td><td class="ar">التوصيل سريع، شكرًا</td></tr>
   </tbody>
 </table>
-<p><strong>Label mapping:</strong> star ratings 1–2 → Negative, 3 → Neutral, 4–5 → Positive. Source labels such as <em>objective</em> or <em>mixed</em> map to Neutral, and mixed items are flagged so they can be analysed separately.</p>
+<p><strong>Label mapping:</strong> star ratings 1–2 map to Negative, 3 to Neutral and 4–5 to Positive unless source documentation justifies a different policy. Ambiguous, mixed-sentiment and conflicting examples are flagged for review rather than silently forced into Neutral.</p>
 
 <table class="compact">
   <thead><tr><th style="width:21%">Candidate dataset</th><th style="width:16%">Language</th><th style="width:14%">Domain</th><th style="width:13%">Size</th><th style="width:13%">Licence</th><th style="width:23%">Planned use</th></tr></thead>
@@ -103,12 +129,12 @@
     <tr><td><strong>Twitter US Airline Sentiment</strong> (CrowdFlower, n.d.)</td><td>English</td><td>Customer-service tweets</td><td>14,640</td><td>CC BY-NC-SA 4.0</td><td>Main English training data</td></tr>
     <tr><td><strong>SemEval-2017 Task 4A</strong> (Rosenthal et al., 2017)</td><td>Arabic, English</td><td>Tweets</td><td>9,455 Arabic; 62,617 English</td><td>Free use beyond SemEval</td><td>Extra three-class training data and a benchmark</td></tr>
     <tr><td><strong>UMSAB</strong> (Barbieri et al., 2022)</td><td>8 languages, including Arabic and English</td><td>Tweets</td><td>3,030 per language</td><td>CC BY 3.0</td><td>External multilingual benchmark</td></tr>
-    <tr><td><strong>JERD</strong> — Jumia Egypt Reviews (aliallam13, 2026)</td><td>Egyptian, MSA, English, Franco-Arabic</td><td>E-commerce reviews</td><td>3,809</td><td>CC BY-NC-ND 4.0</td><td>Held-out test set of real Egyptian feedback</td></tr>
+    <tr><td><strong>JERD</strong> — Jumia Egypt Reviews (aliallam13, 2026)</td><td>Egyptian, MSA, English, Franco-Arabic</td><td>E-commerce reviews</td><td>3,809</td><td>CC BY-NC-ND 4.0</td><td>Candidate real-feedback source; use only supported-language records and respect no-derivatives restrictions</td></tr>
   </tbody>
 </table>
 <ul>
-  <li>At least 10,000 labelled texts per core language after cleaning, and every test slice contains all three classes.</li>
-  <li>Splits are 70 / 15 / 15, stratified by language and label. The test set is frozen at MS1.</li>
+  <li>Every supported-language evaluation slice must contain all three labels; minimum sample targets are set only after dataset inspection.</li>
+  <li>Train, validation and test splits are stratified by language and label where counts allow. The test set is frozen before model experiments.</li>
   <li>Duplicates are removed before splitting, licences are recorded for each source, and raw data is not committed.</li>
 </ul>
 
@@ -118,10 +144,10 @@
   <tbody>
     <tr><td>Language and environment</td><td>Python 3.10+, Jupyter, Google Colab, Kaggle</td></tr>
     <tr><td>Data and preprocessing</td><td>pandas, Hugging Face Datasets, regular expressions, NLTK, Arabic normalisation utilities</td></tr>
-    <tr><td>Classical ML</td><td>scikit-learn: TF-IDF, Naive Bayes, Logistic Regression, Pipelines</td></tr>
-    <tr><td>Deep learning</td><td>TensorFlow / Keras for the BiLSTM; Hugging Face Transformers on PyTorch</td></tr>
-    <tr><td>Experiment tracking</td><td>MLflow (Zaharia et al., 2018)</td></tr>
-    <tr><td>Serving and collaboration</td><td>Azure Machine Learning, Streamlit; GitHub Issues, Projects and pull requests</td></tr>
+    <tr><td>Classical ML</td><td>scikit-learn: TF-IDF, DummyClassifier, Multinomial Naive Bayes, Logistic Regression, Linear SVM and Pipelines</td></tr>
+    <tr><td>Advanced NLP</td><td>Hugging Face Transformers on PyTorch: XLM-R Base; optional MARBERT and conditional BiLSTM comparison</td></tr>
+    <tr><td>Experiment tracking</td><td>Structured experiment records; MLflow may be used when it does not delay required work</td></tr>
+    <tr><td>Application and collaboration</td><td>Local Streamlit; GitHub issues and pull requests; optional FastAPI, Docker and Azure after the core release</td></tr>
   </tbody>
 </table>
 
@@ -142,11 +168,11 @@
     <text x="110" y="148">CX Manager</text>
     <text x="110" y="308">Support Agent</text>
     <text x="890" y="138">Data Scientist</text>
-    <text x="890" y="283">MLOps Engineer</text>
+    <text x="890" y="283">Project Evaluator</text>
   </g>
   <rect x="832" y="318" width="116" height="48" rx="4" fill="#ffffff" stroke="#17324d" stroke-width="1.5"/>
   <text x="890" y="337" text-anchor="middle" font-size="11" fill="#5b6675">«system»</text>
-  <text x="890" y="356" text-anchor="middle" font-size="13" font-weight="600" fill="#17324d">Client app / CRM</text>
+  <text x="890" y="356" text-anchor="middle" font-size="13" font-weight="600" fill="#17324d">Local Streamlit UI</text>
 
   <!-- use cases: left column -->
   <g fill="#ffffff" stroke="#12707a" stroke-width="1.6">
@@ -162,14 +188,14 @@
   </g>
   <g font-size="13" fill="#1f2933" text-anchor="middle">
     <text x="380" y="76.5">Score a CSV file (batch)</text>
-    <text x="380" y="154.5">View sentiment dashboard</text>
+    <text x="380" y="154.5">Review batch summary</text>
     <text x="380" y="232.5">Filter &amp; export results</text>
     <text x="380" y="310.5">Analyse a single text</text>
     <text x="622" y="70.5">Train &amp; tune models</text>
     <text x="622" y="138.5">Review error analysis</text>
-    <text x="622" y="206.5">Compare runs in MLflow</text>
-    <text x="622" y="274.5">Register &amp; deploy model</text>
-    <text x="622" y="342.5">Call prediction REST API</text>
+    <text x="622" y="206.5">Review experiment evidence</text>
+    <text x="622" y="274.5">Select &amp; lock model</text>
+    <text x="622" y="342.5">Run local prediction</text>
   </g>
 
   <!-- associations -->
@@ -188,21 +214,22 @@
   </g>
 </svg>
 </div>
-<div class="caption">Figure 3 — Use-case diagram: business users (left) consume predictions; technical users and external systems (right) build, deploy and integrate the model.</div>
+<div class="caption">Figure 3 — Use-case diagram: business users consume predictions while technical users produce and review reproducible model evidence.</div>
 
 <h2 id="s3-9">3.9 Traceability to the Brief</h2>
 <table class="compact">
   <thead><tr><th style="width:50%">Brief item</th><th style="width:28%">Requirements</th><th style="width:22%">Deliverable</th></tr></thead>
   <tbody>
-    <tr><td>Dataset</td><td>FR-01 – FR-04</td><td>D1</td></tr>
-    <tr><td>Text cleaning, tokenisation</td><td>FR-05 – FR-07</td><td>D2</td></tr>
-    <tr><td>TF-IDF, n-grams, Naive Bayes / Logistic Regression</td><td>FR-08, FR-09</td><td>D3</td></tr>
-    <tr><td>RNN / LSTM or pretrained Hugging Face Transformer</td><td>FR-10, FR-11</td><td>D4</td></tr>
-    <tr><td>Accuracy, precision, recall, F1, confusion matrix</td><td>FR-12</td><td>D5</td></tr>
-    <tr><td>Compare preprocessing strategies and models</td><td>FR-13</td><td>D5</td></tr>
-    <tr><td>Track experiments using MLflow</td><td>FR-14</td><td>D6</td></tr>
-    <tr><td>Error analysis, sample predictions</td><td>FR-15</td><td>D7, D8</td></tr>
-    <tr><td>README</td><td>FR-19</td><td>D9</td></tr>
-    <tr><td><em>Optional:</em> Azure ML endpoint</td><td>FR-18</td><td>D10</td></tr>
+    <tr><td>Project Planning, Stakeholder Analysis, Database Design and UI/UX Design</td><td>Part 1; 3.2; Parts 4–5</td><td>D1</td></tr>
+    <tr><td>Dataset, labels, licences and frozen splits</td><td>FR-01 – FR-04</td><td>D2</td></tr>
+    <tr><td>Text cleaning, normalisation and feature preparation</td><td>FR-05 – FR-07</td><td>D3</td></tr>
+    <tr><td>TF-IDF and focused classical baselines</td><td>FR-08, FR-09</td><td>D4</td></tr>
+    <tr><td>XLM-R and controlled optional comparison</td><td>FR-10, FR-11</td><td>D5</td></tr>
+    <tr><td>Validation selection, final evaluation and error analysis</td><td>FR-12, FR-13, FR-15</td><td>D6</td></tr>
+    <tr><td>Single-text and CSV Streamlit application</td><td>FR-16, FR-17</td><td>D7</td></tr>
+    <tr><td>Experiment evidence and reproduction instructions</td><td>FR-14; NFR-06</td><td>D8</td></tr>
+    <tr><td>README, model card and final technical documentation</td><td>FR-19</td><td>D9</td></tr>
+    <tr><td>Presentation PDF, video demonstration and rehearsal</td><td>Milestone MS5</td><td>D10</td></tr>
+    <tr><td><em>Optional:</em> FastAPI, Docker or Azure deployment</td><td>FR-18</td><td>Stretch scope</td></tr>
   </tbody>
 </table>

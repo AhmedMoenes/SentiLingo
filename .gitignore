@@ -42,6 +42,12 @@ mlartifacts/
 *.onnx
 
 # Tooling
+node_modules/
+.artifact_deps/
+.docx_render/
+.xlsx_preview/
+.xlsx_preview_updated/
+tmp/
 .pytest_cache/
 .ruff_cache/
 .coverage

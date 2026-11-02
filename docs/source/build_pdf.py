@@ -28,7 +28,7 @@ import pymupdf
 
 SRC = Path(__file__).resolve().parent
 DOCS = SRC.parent
-OUTPUT = DOCS / "SentiLingo_Project_Documentation_Parts_1-3.pdf"
+OUTPUT = DOCS / "SentiLingo_Project_Documentation_Parts_1-5.pdf"
 
 BROWSER_CANDIDATES = [
     r"C:\Program Files\Google\Chrome\Application\chrome.exe",
@@ -222,7 +222,7 @@ def assemble(project: dict, toc: str) -> str:
     if leftover:
         sys.exit(f"Unresolved placeholders: {', '.join(leftover)}")
 
-    title = f'{project["project_name"]} — Project Documentation (Parts 1–3)'
+    title = f'{project["project_name"]} - Project Documentation (Parts 1-5)'
     return (
         '<!doctype html><html lang="en"><head><meta charset="utf-8">'
         f"<title>{html.escape(title)}</title><style>{css}</style></head><body>{body}</body></html>"
@@ -280,10 +280,10 @@ def main() -> None:
 
         with pymupdf.open(final) as doc:
             doc.set_metadata({
-                "title": f'{project["project_name"]} — {project["full_title"]}: Project Documentation (Parts 1–3)',
+                "title": f'{project["project_name"]} - {project["full_title"]}: Project Documentation (Parts 1-5)',
                 "author": f'{project["project_name"]} team — {project["program"]}',
-                "subject": "Project Planning & Management, Literature Review, Requirements Gathering",
-                "keywords": "sentiment analysis, multilingual NLP, Arabic, Egyptian dialect, TF-IDF, LSTM, Transformers, MLflow, Azure ML",
+                "subject": "Project Planning and Management, Literature Review, Requirements Gathering, Database Design, UI and UX Design",
+                "keywords": "sentiment analysis, multilingual NLP, English, Modern Standard Arabic, Egyptian Arabic, TF-IDF, XLM-R, Streamlit",
                 "creator": "docs/source/build_pdf.py (HTML + headless Chrome)",
                 "producer": "PyMuPDF",
             })

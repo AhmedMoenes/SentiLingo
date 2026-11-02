@@ -1,0 +1,166 @@
+<section class="part-cover" style="break-before: page">
+  <div class="part-label">PART 5</div>
+  <h1 id="ui-ux-design">5. UI/UX Design</h1>
+  <div class="rule"></div>
+  <p class="lead">A multi-page Streamlit dashboard that separates prediction, analysis and evidence while keeping sensitive feedback out of persistent storage.</p>
+</section>
+
+<section>
+  <h2 id="ui-decision">5.1 Decision and Scope</h2>
+  <p><strong>Selected option.</strong> SentiLingo will use a multi-page local dashboard with sidebar navigation. This is the most portfolio-oriented option: business users can analyse feedback, while evaluators can inspect model evidence and experiment traceability.</p>
+  <p><strong>Scope correction.</strong> A production administration area and persistent prediction history would contradict the approved minimal database and privacy boundary. The dashboard therefore keeps prediction results in the current session. Its history view contains model experiments only, never stored customer messages.</p>
+
+  <table class="compact">
+    <thead><tr><th style="width:29%">Core dashboard</th><th style="width:32%">Supported by the registry</th><th>Future product scope</th></tr></thead>
+    <tbody>
+      <tr><td>Overview, text and CSV analysis</td><td>Dataset and model version references</td><td>User accounts and role administration</td></tr>
+      <tr><td>Current-session results and export</td><td>Experiment runs, metrics and artefact links</td><td>Persistent prediction history and saved dashboards</td></tr>
+      <tr><td>Model performance, help and limitations</td><td>Read-only selected-model traceability</td><td>Team workspaces, alerts and automated monitoring</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="ui-users">5.2 Users and Design Goals</h2>
+  <table class="compact">
+    <thead><tr><th style="width:24%">User</th><th style="width:36%">Primary goal</th><th>UX response</th></tr></thead>
+    <tbody>
+      <tr><td>Support employee</td><td>Understand one message without ML knowledge.</td><td>One focused text input, labelled result, confidence explanation and visible limitation notice.</td></tr>
+      <tr><td>Customer-experience manager</td><td>Analyse a CSV and export row-level results.</td><td>Guided upload, column selection, validation preview, progress, filters and enriched CSV download.</td></tr>
+      <tr><td>ML engineer</td><td>Trace results and compare evidence.</td><td>Model-performance and experiment-registry pages with versions, splits, configurations and metrics.</td></tr>
+      <tr><td>Evaluator or recruiter</td><td>Understand scope, evidence and limitations quickly.</td><td>Overview, reproducible sample flow, honest evaluation separation and portfolio-ready navigation.</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="ui-information-architecture">5.3 Information Architecture</h2>
+  <figure class="figure-block keep-together">
+    <svg viewBox="0 0 1000 395" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SentiLingo multi-page dashboard information architecture">
+      <style>
+        .ia-shell{fill:#f7f9fb;stroke:#17324d;stroke-width:2}.ia-nav{fill:#17324d}.ia-head{font:700 19px 'Segoe UI',Arial,sans-serif;fill:#fff}.ia-label{font:700 16px 'Segoe UI',Arial,sans-serif;fill:#17324d}.ia-text{font:14px 'Segoe UI',Arial,sans-serif;fill:#344054}.ia-core{fill:#e7f4f5;stroke:#0b7782;stroke-width:2}.ia-evidence{fill:#edf3f8;stroke:#1f5f8b;stroke-width:2}.ia-help{fill:#faf4e7;stroke:#b7791f;stroke-width:2}.ia-line{stroke:#66788a;stroke-width:2;fill:none}.ia-dash{stroke-dasharray:6 5}
+      </style>
+      <rect class="ia-shell" x="22" y="20" width="956" height="350" rx="12"/>
+      <rect class="ia-nav" x="22" y="20" width="190" height="350" rx="12"/><rect class="ia-nav" x="190" y="20" width="22" height="350"/>
+      <text class="ia-head" x="48" y="58">SentiLingo</text>
+      <text class="ia-head" x="48" y="102">Overview</text><text class="ia-head" x="48" y="139">Analyze Text</text><text class="ia-head" x="48" y="176">Analyze CSV</text><text class="ia-head" x="48" y="213">Results</text><text class="ia-head" x="48" y="250">Performance</text><text class="ia-head" x="48" y="287">Registry</text><text class="ia-head" x="48" y="324">Help</text>
+      <rect class="ia-core" x="275" y="55" width="195" height="78" rx="9"/><text class="ia-label" x="296" y="85">Overview</text><text class="ia-text" x="296" y="108">Scope and session status</text>
+      <rect class="ia-core" x="520" y="55" width="195" height="78" rx="9"/><text class="ia-label" x="541" y="85">Analyze Text</text><text class="ia-text" x="541" y="108">Single-message workflow</text>
+      <rect class="ia-core" x="765" y="55" width="175" height="78" rx="9"/><text class="ia-label" x="786" y="85">Analyze CSV</text><text class="ia-text" x="786" y="108">Upload and validate</text>
+      <rect class="ia-core" x="275" y="176" width="195" height="78" rx="9"/><text class="ia-label" x="296" y="206">Results</text><text class="ia-text" x="296" y="229">Session analytics and export</text>
+      <rect class="ia-evidence" x="520" y="176" width="195" height="78" rx="9"/><text class="ia-label" x="541" y="206">Model Performance</text><text class="ia-text" x="541" y="229">Validation and locked test</text>
+      <rect class="ia-evidence" x="765" y="176" width="175" height="78" rx="9"/><text class="ia-label" x="786" y="206">Experiment Registry</text><text class="ia-text" x="786" y="229">Read-only run history</text>
+      <rect class="ia-help" x="520" y="297" width="195" height="50" rx="9"/><text class="ia-label" x="541" y="328">Help and Limitations</text>
+      <path class="ia-line" d="M470 94 H520"/><path class="ia-line" d="M715 94 H765"/><path class="ia-line" d="M852 133 V153 H372 V176"/><path class="ia-line" d="M470 215 H520"/><path class="ia-line" d="M715 215 H765"/><path class="ia-line ia-dash" d="M617 254 V297"/>
+    </svg>
+    <figcaption>Figure 5 - Core prediction pages lead to current-session results; evidence pages expose model quality and reproducibility without storing customer text.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2 id="ui-workflows">5.4 Primary User Flows</h2>
+  <table class="compact">
+    <thead><tr><th style="width:18%">Flow</th><th style="width:52%">Steps</th><th>Completion evidence</th></tr></thead>
+    <tbody>
+      <tr><td>Single text</td><td>Analyze Text -> enter or choose a labelled example -> validate -> analyse -> review label, confidence estimate, variety and limitation notice.</td><td>A clear result or an actionable inline error; no input is persisted.</td></tr>
+      <tr><td>CSV batch</td><td>Analyze CSV -> upload -> choose text column -> preview validation -> run -> Results -> filter -> download enriched CSV.</td><td>Every valid input row receives a result or row-level error; output preserves a row identifier.</td></tr>
+      <tr><td>Evaluator review</td><td>Overview -> Model Performance -> Experiment Registry -> Help and Limitations.</td><td>The selected artefact is traceable to its dataset, run, configuration and reported metrics.</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="ui-dashboard-wireframe">5.5 Dashboard Wireframes</h2>
+  <figure class="figure-block keep-together">
+    <svg viewBox="0 0 1000 555" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Low fidelity overview and single text dashboard wireframes">
+      <style>
+        .wf-window{fill:#fff;stroke:#17324d;stroke-width:2}.wf-side{fill:#17324d}.wf-panel{fill:#f5f7f9;stroke:#c8d1dc;stroke-width:1.5}.wf-active{fill:#0b7782}.wf-title{font:700 18px 'Segoe UI',Arial,sans-serif;fill:#17324d}.wf-nav{font:14px 'Segoe UI',Arial,sans-serif;fill:#fff}.wf-text{font:14px 'Segoe UI',Arial,sans-serif;fill:#344054}.wf-small{font:12px 'Segoe UI',Arial,sans-serif;fill:#66788a}.wf-btn{fill:#17324d}.wf-btntext{font:700 13px 'Segoe UI',Arial,sans-serif;fill:#fff}.wf-pos{fill:#dff2e6}.wf-neg{fill:#f9dfdc}.wf-neu{fill:#e6e9ed}
+      </style>
+      <text class="wf-title" x="20" y="28">Overview</text>
+      <rect class="wf-window" x="20" y="45" width="455" height="480" rx="10"/><rect class="wf-side" x="20" y="45" width="112" height="480" rx="10"/><rect class="wf-side" x="120" y="45" width="12" height="480"/>
+      <rect class="wf-active" x="30" y="95" width="92" height="32" rx="5"/><text class="wf-nav" x="42" y="116">Overview</text><text class="wf-nav" x="42" y="155">Text</text><text class="wf-nav" x="42" y="190">CSV</text><text class="wf-nav" x="42" y="225">Results</text><text class="wf-nav" x="42" y="260">Performance</text><text class="wf-nav" x="42" y="295">Registry</text>
+      <text class="wf-title" x="155" y="82">Customer sentiment dashboard</text><text class="wf-small" x="155" y="105">English, MSA and Egyptian Arabic</text>
+      <rect class="wf-panel" x="155" y="132" width="135" height="75" rx="7"/><text class="wf-small" x="170" y="158">Selected model</text><text class="wf-text" x="170" y="184">Not locked yet</text>
+      <rect class="wf-panel" x="305" y="132" width="145" height="75" rx="7"/><text class="wf-small" x="320" y="158">Current session</text><text class="wf-text" x="320" y="184">No batch loaded</text>
+      <rect class="wf-panel" x="155" y="228" width="295" height="100" rx="7"/><text class="wf-text" x="172" y="254">Choose a workflow</text><rect class="wf-btn" x="172" y="274" width="118" height="34" rx="5"/><text class="wf-btntext" x="190" y="296">Analyze text</text><rect class="wf-btn" x="305" y="274" width="125" height="34" rx="5"/><text class="wf-btntext" x="324" y="296">Analyze CSV</text>
+      <rect class="wf-panel" x="155" y="348" width="295" height="140" rx="7"/><text class="wf-text" x="172" y="376">Before interpreting results</text><text class="wf-small" x="172" y="402">Confidence is an estimate, not a guarantee.</text><text class="wf-small" x="172" y="425">Mixed, sarcastic and unsupported text may be wrong.</text><text class="wf-small" x="172" y="448">Input is processed in memory and not stored.</text>
+
+      <text class="wf-title" x="525" y="28">Analyze Text</text>
+      <rect class="wf-window" x="525" y="45" width="455" height="480" rx="10"/><rect class="wf-side" x="525" y="45" width="112" height="480" rx="10"/><rect class="wf-side" x="625" y="45" width="12" height="480"/>
+      <text class="wf-nav" x="547" y="116">Overview</text><rect class="wf-active" x="535" y="134" width="92" height="32" rx="5"/><text class="wf-nav" x="547" y="155">Text</text><text class="wf-nav" x="547" y="190">CSV</text><text class="wf-nav" x="547" y="225">Results</text><text class="wf-nav" x="547" y="260">Performance</text><text class="wf-nav" x="547" y="295">Registry</text>
+      <text class="wf-title" x="660" y="82">Analyze one message</text><text class="wf-small" x="660" y="105">Paste English, MSA or Egyptian Arabic</text>
+      <rect class="wf-panel" x="660" y="130" width="295" height="105" rx="7"/><text class="wf-small" x="675" y="155">Feedback text</text><text class="wf-text" x="675" y="185">The delivery was fast, thank you!</text><rect class="wf-btn" x="825" y="195" width="112" height="28" rx="5"/><text class="wf-btntext" x="845" y="214">Analyze</text>
+      <rect class="wf-panel" x="660" y="255" width="295" height="150" rx="7"/><text class="wf-small" x="675" y="280">Result</text><rect class="wf-pos" x="675" y="294" width="105" height="35" rx="17"/><text class="wf-text" x="698" y="317">Positive</text><text class="wf-text" x="805" y="317">Confidence 0.91</text><text class="wf-small" x="675" y="350">Detected variety: English</text><text class="wf-small" x="675" y="374">Example value shown for wireframe only.</text>
+      <rect class="wf-panel" x="660" y="425" width="295" height="63" rx="7"/><text class="wf-small" x="675" y="451">Limitation</text><text class="wf-text" x="675" y="474">Review low-confidence or mixed-sentiment text.</text>
+    </svg>
+    <figcaption>Figure 6 - Low-fidelity desktop wireframes. Scores and counts are illustrative placeholders until reproducible evaluation exists.</figcaption>
+  </figure>
+
+  <figure class="figure-block keep-together">
+    <svg viewBox="0 0 1000 410" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Low fidelity CSV and results dashboard wireframe">
+      <style>
+        .bw{fill:#fff;stroke:#17324d;stroke-width:2}.bp{fill:#f5f7f9;stroke:#c8d1dc;stroke-width:1.5}.bh{fill:#17324d}.bt{font:700 18px 'Segoe UI',Arial,sans-serif;fill:#17324d}.btxt{font:14px 'Segoe UI',Arial,sans-serif;fill:#344054}.bsmall{font:12px 'Segoe UI',Arial,sans-serif;fill:#66788a}.bwhite{font:700 13px 'Segoe UI',Arial,sans-serif;fill:#fff}.bar1{fill:#2e8b57}.bar2{fill:#7b8794}.bar3{fill:#c8453b}
+      </style>
+      <rect class="bw" x="18" y="18" width="964" height="372" rx="10"/><text class="bt" x="45" y="56">Analyze CSV and review current-session results</text>
+      <rect class="bp" x="45" y="80" width="280" height="130" rx="7"/><text class="btxt" x="62" y="108">1. Upload and validate</text><text class="bsmall" x="62" y="134">File: example-feedback.csv</text><text class="bsmall" x="62" y="157">Text column: feedback_text</text><text class="bsmall" x="62" y="180">118 valid rows, 2 rows need review</text>
+      <rect class="bp" x="355" y="80" width="280" height="130" rx="7"/><text class="btxt" x="372" y="108">2. Run batch</text><rect x="372" y="133" width="230" height="16" rx="8" fill="#d9e0e7"/><rect x="372" y="133" width="170" height="16" rx="8" fill="#0b7782"/><text class="bsmall" x="372" y="177">Progress and row-level errors remain visible.</text>
+      <rect class="bp" x="665" y="80" width="280" height="130" rx="7"/><text class="btxt" x="682" y="108">3. Export</text><text class="bsmall" x="682" y="134">Original row ID + label + confidence</text><rect class="bh" x="682" y="158" width="150" height="34" rx="5"/><text class="bwhite" x="704" y="180">Download results</text>
+      <rect class="bp" x="45" y="240" width="280" height="120" rx="7"/><text class="btxt" x="62" y="268">Sentiment distribution</text><rect class="bar1" x="62" y="292" width="155" height="16"/><text class="bsmall" x="225" y="305">Positive 48</text><rect class="bar2" x="62" y="316" width="112" height="16"/><text class="bsmall" x="182" y="329">Neutral 35</text><rect class="bar3" x="62" y="340" width="105" height="16"/><text class="bsmall" x="175" y="353">Negative 33</text>
+      <rect class="bp" x="355" y="240" width="590" height="120" rx="7"/><text class="btxt" x="372" y="268">Row-level results</text><text class="bsmall" x="372" y="296">ID  | Language  | Sentiment | Confidence | Validation note</text><text class="bsmall" x="372" y="320">001 | English   | Positive  | 0.91       | -</text><text class="bsmall" x="372" y="344">002 | Egyptian  | Negative  | 0.62       | Review low confidence</text>
+    </svg>
+    <figcaption>Figure 7 - Batch flow keeps validation, progress, analytics and export connected without creating persistent prediction history.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2 id="ui-screen-contracts" class="break">5.6 Screen Contracts</h2>
+  <table class="compact">
+    <thead><tr><th style="width:20%">Page</th><th style="width:31%">Required content</th><th style="width:28%">Primary action</th><th>Important state</th></tr></thead>
+    <tbody>
+      <tr><td>Overview</td><td>Scope, current model state, session state, privacy summary and workflow links.</td><td>Choose text or CSV analysis.</td><td>No model locked; no batch loaded.</td></tr>
+      <tr><td>Analyze Text</td><td>Examples, labelled text area, validation, result and limitation notice.</td><td>Analyse one message.</td><td>Empty, loading, success, unsupported or failed.</td></tr>
+      <tr><td>Analyze CSV</td><td>File input, text-column selector, validation summary, preview and progress.</td><td>Run a validated batch.</td><td>Wrong type, encoding failure, missing column or partial rows.</td></tr>
+      <tr><td>Results</td><td>Current-session filters, distribution, language breakdown, row table and export.</td><td>Download enriched CSV.</td><td>No active batch; partial success; export ready.</td></tr>
+      <tr><td>Model Performance</td><td>Model version, validation selection score, locked-test results, per-language metrics and limitations.</td><td>Inspect evidence.</td><td>Not evaluated; validation only; final test available.</td></tr>
+      <tr><td>Experiment Registry</td><td>Read-only runs, dataset version, commit, seed, hardware, metrics and artefact links.</td><td>Trace the selected model.</td><td>Registry unavailable; run incomplete; artefact missing.</td></tr>
+      <tr><td>Help</td><td>Labels, language scope, file contract, privacy, limitations and presentation fallback.</td><td>Understand correct use.</td><td>Always available offline.</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="ui-states">5.7 Validation and Feedback States</h2>
+  <ul>
+    <li><strong>Empty:</strong> explain the next action with one realistic example; do not show fake analytics.</li>
+    <li><strong>Loading:</strong> disable duplicate submission and show the current operation without promising an unmeasured duration.</li>
+    <li><strong>Success:</strong> show the label, confidence estimate, language variety and model version together.</li>
+    <li><strong>Partial success:</strong> preserve valid CSV rows, identify invalid row IDs and allow export with error details.</li>
+    <li><strong>Error:</strong> state what failed, why when known and what the user can do next; never expose stack traces.</li>
+    <li><strong>Unsupported or uncertain:</strong> avoid silently forcing ambiguous, mixed-script or out-of-scope text into Neutral.</li>
+  </ul>
+
+  <h2 id="ui-accessibility">5.8 Accessibility, Arabic and Responsive Behaviour</h2>
+  <ul>
+    <li>All inputs have visible labels, keyboard focus and error text associated with the affected control.</li>
+    <li>Sentiment uses text and optional icons in addition to colour; contrast targets WCAG AA.</li>
+    <li>Arabic message content uses right-to-left direction, while identifiers, numbers, file names and English controls remain left-to-right.</li>
+    <li>The sidebar collapses at narrow widths; cards stack and result tables use a contained horizontal scroll only when necessary.</li>
+    <li>Charts have text summaries and readable labels; essential values never require hover.</li>
+    <li>Editable controls remain comfortable on touch devices and the workflow is testable at 360 px, tablet and desktop widths.</li>
+  </ul>
+
+  <h2 id="ui-visual-rules">5.9 Visual and Data-Display Rules</h2>
+  <table class="compact">
+    <thead><tr><th style="width:25%">Element</th><th>Rule</th></tr></thead>
+    <tbody>
+      <tr><td>Navigation</td><td>Stable sidebar order, one active page and no duplicate page-level actions.</td></tr>
+      <tr><td>Sentiment</td><td>Always spell out Positive, Neutral or Negative; colour is secondary and consistent.</td></tr>
+      <tr><td>Confidence</td><td>Label it an estimate, show a numeric value only when the selected model supports it, and flag low-confidence results for review.</td></tr>
+      <tr><td>Metrics</td><td>Keep validation and locked-test results visually separated; show per-language evidence before overall summaries.</td></tr>
+      <tr><td>Charts</td><td>Use directly labelled bars or tables, honest zero baselines where applicable and no decorative gauges.</td></tr>
+      <tr><td>Placeholders</td><td>Use “Not evaluated” or “Not available”; never invent scores, latency or model status.</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="ui-acceptance">5.10 Acceptance Checklist</h2>
+  <ul class="checklist">
+    <li>Every required page has one primary user goal and one clear primary action.</li>
+    <li>Single-text, CSV and evaluator flows can be completed without hidden prerequisites.</li>
+    <li>Prediction text is not stored and no page implies persistent customer history.</li>
+    <li>Empty, loading, success, partial-success, error and unsupported states are defined.</li>
+    <li>Arabic direction, keyboard access, contrast, responsive layout and offline operation are tested.</li>
+    <li>Wireframes and final screens never present illustrative data as measured model performance.</li>
+  </ul>
+</section>
