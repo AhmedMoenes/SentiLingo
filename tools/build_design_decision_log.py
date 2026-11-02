@@ -277,6 +277,7 @@ add_table(
         ("DD 008", "Model selection metric", "Approved", "24 October 2026"),
         ("DD 009", "Training compute strategy", "Approved", "24 October 2026"),
         ("DD 010", "Database persistence architecture", "Approved", "2 November 2026"),
+        ("DD 011", "Multi-page dashboard UI and UX", "Approved", "3 November 2026"),
     ],
     [Inches(0.8), Inches(3.2), Inches(1.3), Inches(1.6)],
 )
@@ -679,6 +680,51 @@ add_labeled_paragraph(
     doc,
     "Implementation consequence.",
     "Every selected model must be traceable to one run, one immutable dataset version, its language-scoped metrics, and its referenced artifacts. Prediction logging remains disabled unless a later privacy review approves it.",
+)
+
+doc.add_heading("DD 011 Multi Page Dashboard UI and UX", level=1)
+add_labeled_paragraph(
+    doc,
+    "Decision.",
+    "Use a multi-page local Streamlit dashboard with Overview, Analyze Text, Analyze CSV, Results, Model Performance, Experiment Registry, and Help pages. Prediction results remain in the current session; the history view contains model experiments only.",
+)
+add_labeled_paragraph(
+    doc,
+    "Reason.",
+    "The architecture separates business workflows from technical evidence, supports Arabic and batch analysis, and produces a portfolio-ready demonstration without reversing the approved privacy and database boundaries.",
+)
+doc.add_heading("Alternatives Not Selected", level=2)
+add_table(
+    doc,
+    ["Alternative", "Why it was not selected", "Consequence of skipping it"],
+    [
+        (
+            "One combined page",
+            "It is quickest to build but crowds text input, file upload, results, model evidence, and guidance into one long screen.",
+            "The selected architecture requires more navigation and integration testing but gives each user goal a clearer workspace.",
+        ),
+        (
+            "Two analysis tabs only",
+            "It handles prediction but provides limited space for analytics, evaluation evidence, experiment traceability, and portfolio storytelling.",
+            "The team accepts a larger interface surface and must reuse shared components and state consistently.",
+        ),
+        (
+            "Persistent prediction history",
+            "It would store customer text or derived records, expand the database, and require retention, access control, and privacy decisions.",
+            "Users cannot reopen previous prediction sessions; they export the current batch when results must be retained.",
+        ),
+        (
+            "User and role administration",
+            "Authentication and permissions are not required for the local capstone demonstration and would displace model-quality work.",
+            "The first release is a single-team local tool rather than a multi-tenant production service.",
+        ),
+    ],
+    [Inches(1.65), Inches(2.65), Inches(2.6)],
+)
+add_labeled_paragraph(
+    doc,
+    "Implementation consequence.",
+    "The team must define a shared prediction result contract before building pages, design every empty and error state, test Arabic direction and keyboard use, and stop optional visual polish if it threatens evaluation, documentation, or rehearsal.",
 )
 
 doc.add_heading("Pending Decisions", level=1)

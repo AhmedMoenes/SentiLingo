@@ -10,7 +10,7 @@ SentiLingo is a five-week capstone project that will classify customer feedback 
 | **Planning date** | 2 November 2026 |
 | **Final presentation** | 4 December 2026 |
 | **Repository** | https://github.com/AhmedMoenes/SentiLingo |
-| **Documentation** | [Project documentation PDF](docs/SentiLingo_Project_Documentation_Parts_1-4.pdf) |
+| **Documentation** | [Project documentation PDF](docs/SentiLingo_Project_Documentation_Parts_1-5.pdf) |
 
 ## Problem statement
 
@@ -28,7 +28,7 @@ Companies receive customer feedback through reviews, surveys, support channels, 
 | Controlled comparisons | MARBERT if the core schedule is healthy; BiLSTM only if required by the instructor |
 | Model-selection metric | Mean of the per-language macro-F1 scores on validation data |
 | Final evaluation | One evaluation on the frozen test set after the full configuration is locked |
-| User interface | Local Streamlit application with single-text and CSV prediction |
+| User interface | Multi-page local Streamlit dashboard with text, CSV, analytics, evaluation and experiment-registry views |
 | Deployment | Local-first; FastAPI, Docker, and Azure are stretch goals |
 | Compute | Local CPU for data/classical work, RTX 4050 for smoke tests and inference, hosted GPU for main Transformer runs |
 
@@ -49,7 +49,7 @@ Franco-Arabic and other Arabic dialects are outside the core release. Mixed Arab
 - [x] Project Planning
 - [x] Stakeholder Analysis and role-based RACI
 - [x] Database Design - minimal experiment and model registry
-- [ ] UI/UX Design
+- [x] UI/UX Design - multi-page dashboard information architecture and wireframes
 - [ ] Dataset source register, licence review, label mapping, and data card
 - [ ] Reproducible preprocessing and frozen train/validation/test splits
 - [ ] Dummy, Naive Bayes, Logistic Regression, and Linear SVM baselines
