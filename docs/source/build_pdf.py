@@ -283,7 +283,7 @@ def main() -> None:
                 "title": f'{project["project_name"]} — {project["full_title"]}: Project Documentation (Parts 1–3)',
                 "author": f'{project["project_name"]} team — {project["program"]}',
                 "subject": "Project Planning & Management, Literature Review, Requirements Gathering",
-                "keywords": "sentiment analysis, multilingual NLP, Arabic, Egyptian dialect, TF-IDF, LSTM, Transformers, MLflow, Azure ML",
+                "keywords": "sentiment analysis, multilingual NLP, English, Modern Standard Arabic, Egyptian Arabic, TF-IDF, XLM-R, Streamlit",
                 "creator": "docs/source/build_pdf.py (HTML + headless Chrome)",
                 "producer": "PyMuPDF",
             })
