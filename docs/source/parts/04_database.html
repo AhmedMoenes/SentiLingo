@@ -1,0 +1,185 @@
+<section class="part-cover" style="break-before: page">
+  <div class="part-label">PART 4</div>
+  <h1 id="database-design">4. Database Design</h1>
+  <div class="rule"></div>
+  <p class="lead">A minimal experiment and model registry that preserves reproducibility without turning the five-week capstone into a database product.</p>
+</section>
+
+<section>
+  <h2 id="database-decision">4.1 Decision and Scope</h2>
+  <p><strong>Selected option.</strong> SentiLingo will use a small, vendor-neutral relational design to record dataset versions, experiment runs, metrics and generated artefacts. SQLite is the preferred implementation if persistence is added because it is local, zero-cost and easy to back up. The logical design remains portable to PostgreSQL or SQL Server.</p>
+  <p>The registry answers four practical questions: Which data produced a result? Which configuration was executed? How did it perform for each supported language? Which files belong to that run? It does not store user accounts, raw customer messages or prediction history.</p>
+
+  <table class="compact">
+    <thead><tr><th style="width:28%">Stored</th><th style="width:28%">Referenced, not copied</th><th style="width:44%">Deliberately excluded</th></tr></thead>
+    <tbody>
+      <tr><td>Dataset version metadata and checksums</td><td>Source manifests and split files</td><td>User accounts, passwords, roles and sessions</td></tr>
+      <tr><td>Run configuration, seed, environment and timing</td><td>Model weights, tokenizers and reports</td><td>Raw customer text and personal data</td></tr>
+      <tr><td>Validation and locked-test metrics by scope</td><td>Confusion matrices and error-analysis files</td><td>Prediction history, analytics and application events</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="database-er-model">4.2 Conceptual Entity Relationship Model</h2>
+  <figure class="figure-block keep-together">
+    <svg viewBox="0 0 1000 410" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Entity relationship diagram for the SentiLingo experiment registry">
+      <defs>
+        <marker id="db-arrow" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#17324d"/></marker>
+      </defs>
+      <style>
+        .db-box{fill:#f7f9fb;stroke:#17324d;stroke-width:2}.db-head{fill:#17324d}.db-title{font:700 19px 'Segoe UI',Arial,sans-serif;fill:#fff}.db-field{font:15px 'Segoe UI',Arial,sans-serif;fill:#1f2933}.db-key{font-weight:700;fill:#0b7782}.db-line{stroke:#17324d;stroke-width:2;fill:none;marker-end:url(#db-arrow)}.db-card{font:700 15px 'Segoe UI',Arial,sans-serif;fill:#17324d}
+      </style>
+      <g transform="translate(35 85)">
+        <rect class="db-box" width="250" height="225" rx="8"/><rect class="db-head" width="250" height="42" rx="8"/><rect class="db-head" y="34" width="250" height="8"/>
+        <text class="db-title" x="18" y="28">dataset_versions</text>
+        <text class="db-field db-key" x="18" y="70">PK dataset_version_id</text><text class="db-field" x="18" y="96">version_name</text><text class="db-field" x="18" y="122">source_manifest_uri</text><text class="db-field" x="18" y="148">schema_version</text><text class="db-field" x="18" y="174">split_seed and counts</text><text class="db-field" x="18" y="200">checksum_sha256</text>
+      </g>
+      <g transform="translate(375 55)">
+        <rect class="db-box" width="275" height="285" rx="8"/><rect class="db-head" width="275" height="42" rx="8"/><rect class="db-head" y="34" width="275" height="8"/>
+        <text class="db-title" x="18" y="28">experiment_runs</text>
+        <text class="db-field db-key" x="18" y="70">PK run_id</text><text class="db-field db-key" x="18" y="96">FK dataset_version_id</text><text class="db-field" x="18" y="122">model_family and reference</text><text class="db-field" x="18" y="148">feature and parameter JSON</text><text class="db-field" x="18" y="174">seed, Git commit, environment</text><text class="db-field" x="18" y="200">hardware and timestamps</text><text class="db-field" x="18" y="226">status and duration</text><text class="db-field" x="18" y="252">notes</text>
+      </g>
+      <g transform="translate(750 28)">
+        <rect class="db-box" width="220" height="170" rx="8"/><rect class="db-head" width="220" height="42" rx="8"/><rect class="db-head" y="34" width="220" height="8"/>
+        <text class="db-title" x="16" y="28">metric_results</text>
+        <text class="db-field db-key" x="16" y="70">PK metric_id</text><text class="db-field db-key" x="16" y="96">FK run_id</text><text class="db-field" x="16" y="122">split and scope</text><text class="db-field" x="16" y="148">name, value and unit</text>
+      </g>
+      <g transform="translate(750 235)">
+        <rect class="db-box" width="220" height="170" rx="8"/><rect class="db-head" width="220" height="42" rx="8"/><rect class="db-head" y="34" width="220" height="8"/>
+        <text class="db-title" x="16" y="28">artifacts</text>
+        <text class="db-field db-key" x="16" y="70">PK artifact_id</text><text class="db-field db-key" x="16" y="96">FK run_id</text><text class="db-field" x="16" y="122">type, URI and checksum</text><text class="db-field" x="16" y="148">stage and metadata</text>
+      </g>
+      <path class="db-line" d="M285 180 L375 180"/><text class="db-card" x="306" y="164">1 : many</text>
+      <path class="db-line" d="M650 135 C700 135 700 110 750 110"/><text class="db-card" x="676" y="100">1 : many</text>
+      <path class="db-line" d="M650 265 C700 265 700 320 750 320"/><text class="db-card" x="676" y="305">1 : many</text>
+    </svg>
+    <figcaption>Figure 4 - One immutable dataset version can support many runs; each run owns its metrics and artefact references.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2 id="database-logical-schema">4.3 Logical Schema and Data Dictionary</h2>
+  <h3>dataset_versions</h3>
+  <p>One row identifies the exact prepared data and frozen split policy used by experiments. Dataset files remain outside the database.</p>
+  <table class="compact">
+    <thead><tr><th style="width:25%">Field</th><th style="width:18%">Type</th><th style="width:24%">Rule</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td><code>dataset_version_id</code></td><td>TEXT</td><td>Primary key</td><td>Immutable identifier such as <code>ds_2026_11_08_v1</code>.</td></tr>
+      <tr><td><code>version_name</code></td><td>TEXT</td><td>Unique, required</td><td>Human-readable release name.</td></tr>
+      <tr><td><code>source_manifest_uri</code></td><td>TEXT</td><td>Required</td><td>Path or URI to source, licence and provenance records.</td></tr>
+      <tr><td><code>schema_version</code></td><td>TEXT</td><td>Required</td><td>Version of the common dataset columns and validation rules.</td></tr>
+      <tr><td><code>label_policy_version</code></td><td>TEXT</td><td>Required</td><td>Version of the Positive, Neutral and Negative mapping policy.</td></tr>
+      <tr><td><code>split_seed</code></td><td>INTEGER</td><td>Required</td><td>Seed used for reproducible stratified splits.</td></tr>
+      <tr><td><code>train_count</code>, <code>validation_count</code>, <code>test_count</code></td><td>INTEGER</td><td>Non-negative</td><td>Audit counts after cleaning and deduplication.</td></tr>
+      <tr><td><code>checksum_sha256</code></td><td>TEXT</td><td>Unique, required</td><td>Detects an accidental change to the prepared dataset manifest.</td></tr>
+      <tr><td><code>license_summary</code>, <code>created_at</code></td><td>TEXT, TIMESTAMP</td><td>Required; UTC time</td><td>Usage limitations and creation time.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>experiment_runs</h3>
+  <p>One row represents one reproducible training or evaluation attempt. Configuration objects are stored as versioned JSON text to avoid adding tables for every algorithm-specific parameter.</p>
+  <table class="compact">
+    <thead><tr><th style="width:25%">Field</th><th style="width:18%">Type</th><th style="width:24%">Rule</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td><code>run_id</code></td><td>TEXT</td><td>Primary key</td><td>UUID or another collision-safe immutable identifier.</td></tr>
+      <tr><td><code>dataset_version_id</code></td><td>TEXT</td><td>Foreign key, required</td><td>Exact data version used by the run.</td></tr>
+      <tr><td><code>run_name</code>, <code>model_family</code>, <code>model_reference</code></td><td>TEXT</td><td>Name and family required</td><td>Readable name, algorithm family and base checkpoint or implementation.</td></tr>
+      <tr><td><code>feature_config_json</code>, <code>hyperparameters_json</code></td><td>TEXT</td><td>Valid versioned JSON</td><td>Vectorizer, preprocessing and training configuration.</td></tr>
+      <tr><td><code>random_seed</code>, <code>git_commit_sha</code>, <code>environment_ref</code></td><td>INTEGER, TEXT</td><td>Required when completed</td><td>Reproduction evidence for code and dependencies.</td></tr>
+      <tr><td><code>hardware</code>, <code>started_at</code>, <code>completed_at</code></td><td>TEXT, TIMESTAMP</td><td>UTC timestamps</td><td>Where and when the experiment ran.</td></tr>
+      <tr><td><code>status</code>, <code>duration_seconds</code>, <code>notes</code></td><td>TEXT, INTEGER, TEXT</td><td>Controlled status; non-negative duration</td><td>Lifecycle, elapsed time and concise observations.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>metric_results</h3>
+  <table class="compact">
+    <thead><tr><th style="width:25%">Field</th><th style="width:18%">Type</th><th style="width:24%">Rule</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td><code>metric_id</code>, <code>run_id</code></td><td>INTEGER, TEXT</td><td>Primary key; foreign key</td><td>Metric record and owning experiment.</td></tr>
+      <tr><td><code>data_split</code></td><td>TEXT</td><td><code>validation</code> or <code>test</code></td><td>Prevents test evidence from being confused with model-selection evidence.</td></tr>
+      <tr><td><code>language_scope</code></td><td>TEXT</td><td>Overall, English, MSA or Egyptian</td><td>Supports the approved language-balanced score.</td></tr>
+      <tr><td><code>label_scope</code></td><td>TEXT</td><td>All or one sentiment label</td><td>Allows overall and per-class evidence.</td></tr>
+      <tr><td><code>metric_name</code>, <code>metric_value</code>, <code>unit</code></td><td>TEXT, REAL, TEXT</td><td>Required; unique per scope</td><td>Macro-F1, accuracy, precision, recall, latency or another documented measure.</td></tr>
+      <tr><td><code>is_primary</code>, <code>created_at</code></td><td>BOOLEAN, TIMESTAMP</td><td>Required; UTC time</td><td>Marks the approved selection metric and record time.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>artifacts</h3>
+  <table class="compact">
+    <thead><tr><th style="width:25%">Field</th><th style="width:18%">Type</th><th style="width:24%">Rule</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td><code>artifact_id</code>, <code>run_id</code></td><td>TEXT</td><td>Primary key; foreign key</td><td>Artefact record and owning experiment.</td></tr>
+      <tr><td><code>artifact_type</code></td><td>TEXT</td><td>Controlled vocabulary</td><td>Model, tokenizer, confusion matrix, error analysis, sample predictions or report.</td></tr>
+      <tr><td><code>artifact_uri</code>, <code>checksum_sha256</code></td><td>TEXT</td><td>Required</td><td>Location and integrity check; the binary is not copied into SQLite.</td></tr>
+      <tr><td><code>size_bytes</code>, <code>created_at</code></td><td>INTEGER, TIMESTAMP</td><td>Non-negative; UTC time</td><td>Storage size and creation time.</td></tr>
+      <tr><td><code>lifecycle_stage</code></td><td>TEXT</td><td>Candidate, selected or retired</td><td>Records which model artefact is approved for the local demo.</td></tr>
+      <tr><td><code>metadata_json</code></td><td>TEXT</td><td>Valid versioned JSON</td><td>Optional framework, serialization and compatibility details.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2 id="database-integrity">4.4 Relationships and Integrity Rules</h2>
+  <ol>
+    <li>A dataset version may have many experiment runs; every run must reference exactly one dataset version.</li>
+    <li>A run may have many metric and artefact records. Orphan records are rejected by foreign keys.</li>
+    <li>Completed runs are append-only audit evidence. Corrections create a new run; identifiers and historical metrics are not overwritten.</li>
+    <li>The tuple of run, split, language scope, label scope and metric name is unique.</li>
+    <li>Counts, durations, sizes and metric values cannot be negative. Status and scope fields use controlled values.</li>
+    <li>Only a model artefact may be marked selected, and at most one model is selected for the current local-demo release.</li>
+    <li>Test metrics are written only after the configuration is locked. This is enforced by the experiment workflow and reviewed evidence.</li>
+  </ol>
+
+  <h2 id="database-lifecycle">4.5 Record Lifecycle</h2>
+  <table class="compact">
+    <thead><tr><th style="width:17%">Stage</th><th style="width:33%">Database action</th><th>Evidence produced</th></tr></thead>
+    <tbody>
+      <tr><td>Prepare data</td><td>Create one immutable dataset-version row after the audit and frozen split.</td><td>Manifest path, licences, schema and label-policy versions, counts and checksum.</td></tr>
+      <tr><td>Start a run</td><td>Create a run with status <code>running</code> and the full intended configuration.</td><td>Run ID shared by logs and output folders.</td></tr>
+      <tr><td>Finish or fail</td><td>Set completion time, duration and final status; retain failed runs when informative.</td><td>Reproducible history, including unsuccessful attempts.</td></tr>
+      <tr><td>Evaluate</td><td>Insert metrics by split, language and label; link confusion matrices and error analysis.</td><td>Comparable validation leaderboard and final locked-test evidence.</td></tr>
+      <tr><td>Select model</td><td>Mark the approved model artefact selected and retire any previous selection.</td><td>Traceable link from the demo model to its run and dataset.</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="database-security">4.6 Privacy, Security and Retention</h2>
+  <ul>
+    <li><strong>Data minimisation:</strong> store experiment metadata, not raw feedback or user identifiers.</li>
+    <li><strong>Prediction logging:</strong> disabled by default. The Streamlit application processes text in memory and does not add it to the registry.</li>
+    <li><strong>Secrets:</strong> never store tokens, passwords or cloud keys in the database or repository.</li>
+    <li><strong>Access:</strong> the local registry is writable only by the project team. Submission exports are read-only CSV or JSON files.</li>
+    <li><strong>Retention:</strong> keep completed-run metadata and checksums for reproducibility; delete unneeded model binaries separately without deleting their historical records.</li>
+    <li><strong>Backup:</strong> copy the SQLite file and exported registry at each milestone and before the presentation.</li>
+  </ul>
+
+  <h2 id="database-physical">4.7 Physical Design and Portability</h2>
+  <p>SQLite is the default physical store because the demonstration is local and concurrent writes are not expected. Foreign keys must be enabled. Timestamps use UTC ISO 8601 values, identifiers are text-based and JSON content carries an explicit schema version.</p>
+  <table class="compact">
+    <thead><tr><th style="width:31%">Physical choice</th><th>Decision</th></tr></thead>
+    <tbody>
+      <tr><td>Indexes</td><td>Index runs by dataset and status, metrics by run and scope, and artefacts by run and type.</td></tr>
+      <tr><td>Generated files</td><td>The database and model artefacts are generated outputs and are not committed; schema documentation and export examples are committed.</td></tr>
+      <tr><td>Backup and export</td><td>Use a copied database file plus CSV or JSON exports so evaluators are not forced to install SQLite tools.</td></tr>
+      <tr><td>Migration path</td><td>Keep generic types and application-level JSON validation so PostgreSQL or SQL Server can replace SQLite later.</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="database-alternatives">4.8 Alternatives and Consequences</h2>
+  <table class="compact">
+    <thead><tr><th style="width:24%">Alternative</th><th style="width:38%">Why it was not selected</th><th>Consequence of skipping it</th></tr></thead>
+    <tbody>
+      <tr><td>No operational database</td><td>Configuration files alone are simple but make cross-run comparison, integrity rules and audit queries harder.</td><td>The team accepts a small persistence task to gain database-design and reproducibility experience.</td></tr>
+      <tr><td>Full application database</td><td>Accounts, roles, authentication, prediction history and analytics would consume time needed for data quality and modelling.</td><td>The demo is single-team and local; it will not provide sign-in, personal history or multi-user concurrency.</td></tr>
+      <tr><td>Cloud-managed database</td><td>It adds cost, credentials, networking and availability risks without helping the required offline demonstration.</td><td>The first release does not demonstrate cloud database operations; portability is preserved in the logical design.</td></tr>
+      <tr><td>Store model binaries in the database</td><td>Large binary objects complicate backup, transfer and version control.</td><td>File storage must be organised and protected; the registry stores URIs, checksums and metadata instead.</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="database-acceptance">4.9 Acceptance Checklist</h2>
+  <ul class="checklist">
+    <li>The ER model and all four tables are reviewed by the team.</li>
+    <li>Primary keys, foreign keys, controlled values and unique metric scope are documented.</li>
+    <li>No raw feedback, credentials or prediction history are included.</li>
+    <li>One sample run can be traced to its dataset, metrics and artefacts.</li>
+    <li>SQLite backup and CSV or JSON export can be demonstrated if persistence is implemented.</li>
+  </ul>
+</section>

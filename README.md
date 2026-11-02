@@ -10,7 +10,7 @@ SentiLingo is a five-week capstone project that will classify customer feedback 
 | **Planning date** | 2 November 2026 |
 | **Final presentation** | 4 December 2026 |
 | **Repository** | https://github.com/AhmedMoenes/SentiLingo |
-| **Documentation** | [Project documentation PDF](docs/SentiLingo_Project_Documentation_Parts_1-3.pdf) |
+| **Documentation** | [Project documentation PDF](docs/SentiLingo_Project_Documentation_Parts_1-4.pdf) |
 
 ## Problem statement
 
@@ -48,7 +48,7 @@ Franco-Arabic and other Arabic dialects are outside the core release. Mixed Arab
 
 - [x] Project Planning
 - [x] Stakeholder Analysis and role-based RACI
-- [ ] Database Design
+- [x] Database Design - minimal experiment and model registry
 - [ ] UI/UX Design
 - [ ] Dataset source register, licence review, label mapping, and data card
 - [ ] Reproducible preprocessing and frozen train/validation/test splits
