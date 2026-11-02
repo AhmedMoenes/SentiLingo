@@ -46,7 +46,10 @@ Franco-Arabic and other Arabic dialects are outside the core release. Mixed Arab
 
 ## Deliverables
 
-- [ ] Project Planning, Stakeholder Analysis, Database Design, and UI/UX Design
+- [x] Project Planning
+- [x] Stakeholder Analysis and role-based RACI
+- [ ] Database Design
+- [ ] UI/UX Design
 - [ ] Dataset source register, licence review, label mapping, and data card
 - [ ] Reproducible preprocessing and frozen train/validation/test splits
 - [ ] Dummy, Naive Bayes, Logistic Regression, and Linear SVM baselines

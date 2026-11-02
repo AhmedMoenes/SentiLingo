@@ -63,10 +63,10 @@
 <table class="compact">
   <thead><tr><th style="width:5%">#</th><th style="width:47%">Gap in existing work</th><th style="width:48%">SentiLingo response</th></tr></thead>
   <tbody>
-    <tr><td class="id">G1</td><td>Egyptian dialect and Franco-Arabic are poorly covered by ready-made tools</td><td>One pipeline for MSA, Egyptian Arabic, English and Franco-Arabic, evaluated per language</td></tr>
+    <tr><td class="id">G1</td><td>Egyptian dialect and Franco-Arabic are poorly covered by ready-made tools</td><td>The core pipeline supports MSA, Egyptian Arabic and English with separate evaluation; Franco-Arabic is documented as out of scope</td></tr>
     <tr><td class="id">G2</td><td>Classical and Transformer models are rarely compared on the same data; studies often use one dataset and two classes</td><td>The same frozen splits, seeds and metrics for every model family, with three classes</td></tr>
     <tr><td class="id">G3</td><td>Commercial APIs cannot be customised and can be retired</td><td>An owned model that can be retrained on company data</td></tr>
-    <tr><td class="id">G4</td><td>Published results are hard to reproduce</td><td>Every run tracked in MLflow, with reproduction steps in the README</td></tr>
+    <tr><td class="id">G4</td><td>Published results are hard to reproduce</td><td>Every reported run has a structured experiment record, with reproduction steps in the README; MLflow may implement the record</td></tr>
     <tr><td class="id">G5</td><td>LLMs are costly per prediction</td><td>Fine-tuned compact models, with latency reported next to accuracy</td></tr>
   </tbody>
 </table>
