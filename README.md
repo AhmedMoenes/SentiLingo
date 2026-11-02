@@ -6,11 +6,12 @@ SentiLingo is a five-week capstone project that will classify customer feedback 
 
 | | |
 |---|---|
-| **Current status** | Planning and design package in progress; implementation has not started |
+| **Current status** | Planning and design package complete; dataset selection is next |
 | **Planning date** | 2 November 2026 |
 | **Final presentation** | 4 December 2026 |
 | **Repository** | https://github.com/AhmedMoenes/SentiLingo |
 | **Documentation** | [Project documentation PDF](docs/SentiLingo_Project_Documentation_Parts_1-5.pdf) |
+| **Presentation package** | [Concept presentation, editable deck, and illustration video](presentation/README.md) |
 
 ## Problem statement
 
